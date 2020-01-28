@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyLife</string>
+    <string name="title_activity_inscription">Inscription</string>
 </resources>
