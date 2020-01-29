@@ -1,4 +1,15 @@
 <resources>
     <string name="app_name">MyLife</string>
     <string name="title_activity_inscription">Inscription</string>
+    <string name="calendar">Mon calendrier</string>
+    <string name="nom">Nom :</string>
+    <string name="prenom">Prénom :</string>
+    <string name="login">Login :</string>
+    <string name="mdp">Mot de passe :</string>
+    <string name="confirmation">Confirmation :</string>
+    <string name="connexion">Connexion</string>
+    <string name="inscription">Inscription</string>
+    <string name="messInscription">Vous n\'avez pas de compte ?</string>
+    <string name="mesEspaces">Mes Espaces</string>
+s
 </resources>
