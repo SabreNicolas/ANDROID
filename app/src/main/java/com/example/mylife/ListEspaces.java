@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class ListEspaces extends AppCompatActivity {
 
@@ -13,6 +14,12 @@ public class ListEspaces extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_espaces);
+
+        Bundle b = this.getIntent().getExtras();
+        String loginRecup = b.getString("login");
+        String passwdRecup = b.getString("passwd");
+        Toast t = Toast.makeText(this,"infos récupérés = "+ loginRecup + "," + passwdRecup ,Toast.LENGTH_SHORT);
+        t.show();
     }
 
     @Override
@@ -31,11 +38,23 @@ public class ListEspaces extends AppCompatActivity {
                 Intent versPrefs = new Intent(this, Calendar.class);
                 startActivity(versPrefs);
                 break;
-            case R.id.addIndicateur : break;
-            case R.id.gestionIndicateur : break;
-            case R.id.addEspace : break;
-            case R.id.gestionEspace : break;
+            case R.id.addIndicateur :
+                // affiche de l'activité add Indicateur
+                Intent versaddIndicateur = new Intent(this, addIndicateur.class);
+                startActivity(versaddIndicateur);
+                break;
+            case R.id.gestionIndicateur :
+                // affiche de l'activité liste Indicateur
+                Intent verslistIndicateurs = new Intent(this, ListIndicateurs.class);
+                startActivity(verslistIndicateurs);
+                break;
+            case R.id.addEspace :
+                // affiche de l'activité add Espace
+                Intent versaddEspace = new Intent(this, addEspace.class);
+                startActivity(versaddEspace);
+                break;
             case R.id.action_settings : break;
+            case R.id.action_account : break;
         }
         return super.onOptionsItemSelected(item);
     }

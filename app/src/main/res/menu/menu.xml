@@ -19,10 +19,6 @@
         android:id="@+id/addEspace"
         app:showAsAction="never"
         android:title="Ajouter un espace"/>
-    <item
-        android:id="@+id/gestionEspace"
-        app:showAsAction="never"
-        android:title="Gestion des espaces"/>
 
     <item
         android:id="@+id/action_settings"

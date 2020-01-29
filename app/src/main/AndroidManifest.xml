@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ListEspaces"></activity>
+        <activity android:name=".ListIndicateurs"></activity>
+        <activity android:name=".addEspace" />
+        <activity android:name=".addIndicateur" />
+        <activity android:name=".ListEspaces" />
         <activity android:name=".Calendar" />
         <activity android:name=".inscription" />
         <activity android:name=".MainActivity">
