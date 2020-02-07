@@ -21,6 +21,7 @@
     <string name="addEspace">Ajout d\'un espace</string>
     <string name="nameEspace">Nom espace :</string>
     <string name="choiseType">Choissisez un type</string>
+
     <string-array name="type_arrays">
         <item>Input</item>
         <item>ComboBox</item>
