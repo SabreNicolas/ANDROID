@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.applandeo.materialcalendarview.CalendarView;
@@ -16,11 +17,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
-public class Calendar extends AppCompatActivity {
+public class Calendar extends AppCompatActivity implements View.OnClickListener{
 
     private static final String CAT = "CALENDAR";
     private CalendarView mCalendarView;
+    private Button btnHistoric;
     private String dateClicked;
+    private String dateFormatted;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,8 @@ public class Calendar extends AppCompatActivity {
         setContentView(R.layout.activity_calendar);
 
         mCalendarView = findViewById(R.id.calendarView);
+        btnHistoric = (Button) findViewById(R.id.btnHistoric);
+        btnHistoric.setOnClickListener(this);
 
 
         mCalendarView.setOnDayClickListener(new OnDayClickListener() {
@@ -39,8 +45,8 @@ public class Calendar extends AppCompatActivity {
 
              Date date = new Date(dateClicked);
              SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-             String formatted = sdf.format(date);
-             alerter(formatted);
+             dateFormatted = sdf.format(date);
+             alerter(dateFormatted);
             }
         });
     }
@@ -52,4 +58,26 @@ public class Calendar extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btnHistoric:
+                //recuperer le jour sélectionné saisi , s'il n'est pas vide changer d'activité
+                //et afficher historique de ce jour
+
+                if(dateFormatted.isEmpty()){
+                    alerter("Choisir une date");
+                    return;
+                }
+                Bundle myBundle = new Bundle();
+                myBundle.putString("date",dateFormatted);
+
+                Intent versHistoric= new Intent(this,HistoricEspaces.class);
+                versHistoric.putExtras(myBundle);
+                startActivity(versHistoric);
+                break;
+            default:    alerter("cas non prévu");
+        }
+
+    }
 }

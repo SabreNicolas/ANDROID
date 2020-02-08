@@ -8,17 +8,31 @@
 
     <com.applandeo.materialcalendarview.CalendarView
         android:id="@+id/calendarView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:headerColor="@color/colorPrimary"
+        android:layout_width="411dp"
+        android:layout_height="585dp"
         app:datePicker="false"
-        app:todayLabelColor="@color/blue"
+        app:headerColor="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:todayLabelColor="@color/blue" >
 
+    </com.applandeo.materialcalendarview.CalendarView>
 
+    <Button
+        android:id="@+id/btnHistoric"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/historic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.909" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
