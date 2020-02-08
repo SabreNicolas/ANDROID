@@ -11,9 +11,14 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:headerColor="@color/colorPrimary"
+        app:datePicker="false"
+        app:todayLabelColor="@color/blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

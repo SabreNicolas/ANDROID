@@ -12,6 +12,7 @@ import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -34,8 +35,12 @@ public class Calendar extends AppCompatActivity {
             @Override
             public void onDayClick(EventDay eventDay) {
              java.util.Calendar clicked = eventDay.getCalendar();
-                dateClicked = clicked.getTime().toString();
-                alerter(dateClicked);
+             dateClicked = clicked.getTime().toString();
+
+             Date date = new Date(dateClicked);
+             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+             String formatted = sdf.format(date);
+             alerter(formatted);
             }
         });
     }
