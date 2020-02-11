@@ -22,8 +22,11 @@ public class Calendar extends AppCompatActivity implements View.OnClickListener{
     private static final String CAT = "CALENDAR";
     private CalendarView mCalendarView;
     private Button btnHistoric;
+
     private String dateClicked;
     private String dateFormatted;
+    private Date dateJour;
+    private String dateJourFormatted;
 
 
     @Override
@@ -34,6 +37,8 @@ public class Calendar extends AppCompatActivity implements View.OnClickListener{
         mCalendarView = findViewById(R.id.calendarView);
         btnHistoric = (Button) findViewById(R.id.btnHistoric);
         btnHistoric.setOnClickListener(this);
+
+        getDateJour();
 
 
         mCalendarView.setOnDayClickListener(new OnDayClickListener() {
@@ -46,7 +51,7 @@ public class Calendar extends AppCompatActivity implements View.OnClickListener{
              Date date = new Date(dateClicked);
              SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
              dateFormatted = sdf.format(date);
-             alerter(dateFormatted);
+             btnHistoric.setText("Historique du : " + dateFormatted);
             }
         });
     }
@@ -56,6 +61,13 @@ public class Calendar extends AppCompatActivity implements View.OnClickListener{
         Toast myToast = Toast.makeText(this, s, Toast.LENGTH_SHORT);
         myToast.show();
 
+    }
+
+    private void getDateJour(){
+        dateJour = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        dateJourFormatted = sdf.format(dateJour);
+        btnHistoric.setText("Historique du : " + dateJourFormatted);
     }
 
     @Override
