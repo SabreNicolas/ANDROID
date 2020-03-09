@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">MyLife</string>
-    <string name="title_activity_inscription">Inscription</string>
-    <string name="calendar">Mon calendrier</string>
     <string name="nom">Nom :</string>
     <string name="prenom">Prénom :</string>
     <string name="login">Login :</string>

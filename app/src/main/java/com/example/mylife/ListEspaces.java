@@ -17,8 +17,7 @@ public class ListEspaces extends AppCompatActivity {
 
         Bundle b = this.getIntent().getExtras();
         String loginRecup = b.getString("login");
-        String passwdRecup = b.getString("passwd");
-        Toast t = Toast.makeText(this,"infos récupérés = "+ loginRecup + "," + passwdRecup ,Toast.LENGTH_SHORT);
+        Toast t = Toast.makeText(this,"infos récupérés = "+ loginRecup ,Toast.LENGTH_SHORT);
         t.show();
     }
 
