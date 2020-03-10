@@ -44,18 +44,17 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
         protected JSONObject doInBackground(String... qs) {
             // pas d'interaction avec l'UI Thread ici
             // On exécute la requete
-            //String res = MainActivity.this.gs.requete(qs[0]);
             String res = null;
             try {
-                res = inscription.this.gs.requete(qs[0]);
+                System.out.println("********** dans le try");
+                res = inscription.this.gs.sendPost(qs[0]);
+                System.out.println("********** après le sendPOST");
+                System.out.println(res);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             try {
-                JSONArray jsonTab = new JSONArray(res);
-                //System.out.println("je récupère : " + jsonTab);
-                JSONObject json = jsonTab.getJSONObject(0);
-
+                JSONObject json = new JSONObject(res);
                 return json;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -111,6 +110,7 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
         editTextPasswdConfirm.setOnClickListener(this);
         btnSubscibe = (Button) findViewById(R.id.buttonSubscribe);
         btnSubscibe.setOnClickListener(this);
+        gs = (GlobalState) getApplication();
     }
 
     private void alerter(String s) {
@@ -157,7 +157,7 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
                 }
 
                 JSONAsyncTask jsAT = new JSONAsyncTask();
-                jsAT.execute("/users/?nom=" +nom+"&prenom="+prenom+"&login="+login+"&passwd="+passwd);
+                jsAT.execute("?nom=" +nom+"&prenom="+prenom+"&login="+login+"&passwd="+passwd);
                 break;
             default:    alerter("cas non prévu");
         }

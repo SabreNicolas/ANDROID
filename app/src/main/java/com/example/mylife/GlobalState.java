@@ -16,12 +16,15 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import javax.net.ssl.HttpsURLConnection;
 
 public class GlobalState extends Application {
 
@@ -115,12 +118,13 @@ public class GlobalState extends Application {
         return bStatut;
     }
 
-    public String requete(String qs) {
+    /*public String requete(String qs) {
         if (qs != null)
         {
             try {
                 URL url = new URL(URL + qs);
-                Log.i(CAT,"url utilisée : " + url.toString());
+                System.out.println("\nSending 'POST' request to URL : " + url);
+                //System.out.println("Response Code : " + responseCode);
                 HttpURLConnection urlConnection = null;
                 urlConnection = (HttpURLConnection) url.openConnection();
                 InputStream in = null;
@@ -137,7 +141,47 @@ public class GlobalState extends Application {
         }
 
         return "";
+    }*/
+
+    public String sendPost(String requete) throws Exception {
+        System.out.println("************avant test");
+        if (requete != null) {
+            System.out.println("************apres test");
+            String url = "http://10.0.2.2:8888/API_ANDROID/users";
+            URL obj = new URL(url);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+            //add reuqest header
+            con.setRequestMethod("POST");
+            con.setRequestProperty("inscription", requete);
+            //con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+
+            String urlParameters = requete;
+
+            //Send post request
+            con.setDoOutput(true);
+            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+            wr.writeBytes(urlParameters);
+            wr.flush();
+            wr.close();
+
+            int responseCode = con.getResponseCode();
+            System.out.println("\nSending 'POST' request to URL : " + URL);
+            System.out.println("Post parameters : " + urlParameters);
+            System.out.println("Response Code : " + responseCode);
+
+            InputStream in = null;
+            in = new BufferedInputStream(con.getInputStream());
+            String txtReponse = convertStreamToString(in);
+            con.disconnect();
+
+            System.out.println(txtReponse);
+            return txtReponse;
+        }
+        return "";
     }
+
+
 
     public String sendGet(String requete) throws Exception {
         if (requete != null) {
