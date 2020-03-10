@@ -3,12 +3,22 @@ package com.example.mylife;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import classBDD.User;
 
 public class inscription extends AppCompatActivity implements View.OnClickListener{
     private static final String CAT = "IME";
@@ -18,6 +28,71 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
     private EditText editTextPasswd;
     private EditText editTextPasswdConfirm;
     private Button btnSubscibe;
+    private User u;
+    private String nomu;
+    private String prenomu;
+
+    class JSONAsyncTask extends AsyncTask<String, Void, JSONObject> {
+        // Params, Progress, Result
+
+        @Override
+        protected void onPreExecute() { // S’exécute dans l’UI Thread
+            super.onPreExecute();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... qs) {
+            // pas d'interaction avec l'UI Thread ici
+            // On exécute la requete
+            //String res = MainActivity.this.gs.requete(qs[0]);
+            String res = null;
+            try {
+                res = inscription.this.gs.requete(qs[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                JSONArray jsonTab = new JSONArray(res);
+                //System.out.println("je récupère : " + jsonTab);
+                JSONObject json = jsonTab.getJSONObject(0);
+
+                return json;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(JSONObject json) { // S’exécute dans l’UI Thread
+            if (json != null) {
+                super.onPostExecute(json);
+
+                String s = json.toString();
+                //MainActivity.this.gs.alerter(MainActivity.this.gs.jsonToPrettyFormat(s));
+
+                Gson gson = new GsonBuilder()
+                        .serializeNulls()
+                        .disableHtmlEscaping()
+                        .setPrettyPrinting()
+                        .create();
+
+                /*u = gson.fromJson(s, User.class);
+                nomu = u.getNom();
+                prenomu = u.getPrenom();
+
+                Bundle myBundle = new Bundle();
+                myBundle.putString("nom",nomu);
+                myBundle.putString("prenom",prenomu);*/
+
+                Intent versAcceuil= new Intent(gs,MainActivity.class);
+                //versAcceuil.putExtras(myBundle);
+                startActivity(versAcceuil);
+
+                //MainActivity.this.gs.alerter(u.toString());
+            }
+        }
+    }
+    GlobalState gs;
 
 
     @Override
@@ -80,16 +155,9 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
                     alerter("Les mots de passe sont différents");
                     return;
                 }
-                Bundle myBundle = new Bundle();
-                myBundle.putString("nom",nom);
-                myBundle.putString("prenom",prenom);
-                myBundle.putString("login",login);
-                myBundle.putString("passwd",passwd);
-                myBundle.putString("passwdConfirm",passwdConfirm);
 
-                Intent versAcceuil= new Intent(this,ListEspaces.class);
-                versAcceuil.putExtras(myBundle);
-                startActivity(versAcceuil);
+                JSONAsyncTask jsAT = new JSONAsyncTask();
+                jsAT.execute("/users/?nom=" +nom+"&prenom="+prenom+"&login="+login+"&passwd="+passwd);
                 break;
             default:    alerter("cas non prévu");
         }

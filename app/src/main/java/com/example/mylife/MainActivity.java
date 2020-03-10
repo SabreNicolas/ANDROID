@@ -39,10 +39,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText editTextPasswd;
     private Button btnConnexion;
     private Button btnInscription;
-    private boolean isCo = false;
-    private final String URL = "http://10.0.2.2:8888/API_ANDROID/";
+    private User u;
     private String nom;
     private String prenom;
+    private boolean isCo = false;
 
 
 
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 JSONArray jsonTab = new JSONArray(res);
                 //System.out.println("je récupère : " + jsonTab);
                 JSONObject json = jsonTab.getJSONObject(0);
-                isCo = true;
+
                 return json;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -79,14 +79,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         protected void onPostExecute(JSONObject json) { // S’exécute dans l’UI Thread
             if (json != null) {
+                isCo = true;
                 super.onPostExecute(json);
-
-                try {
-                    nom = json.getString("nom");
-                    prenom= json.getString("prenom");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
 
                 String s = json.toString();
                 //MainActivity.this.gs.alerter(MainActivity.this.gs.jsonToPrettyFormat(s));
@@ -97,8 +91,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setPrettyPrinting()
                         .create();
 
-                User u = gson.fromJson(s, User.class);
-                MainActivity.this.gs.alerter(u.toString());
+                u = gson.fromJson(s, User.class);
+                nom = u.getNom();
+                prenom = u.getPrenom();
+
+                Bundle myBundle = new Bundle();
+                myBundle.putString("nom",nom);
+                myBundle.putString("prenom",prenom);
+
+                Intent versAcceuil= new Intent(gs,ListEspaces.class);
+                versAcceuil.putExtras(myBundle);
+                startActivity(versAcceuil);
+
+                //MainActivity.this.gs.alerter(u.toString());
             }
         }
     }
@@ -165,18 +170,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 JSONAsyncTask jsAT = new JSONAsyncTask();
                 jsAT.execute("/users/" + login+"/"+passwd);
-
-                if (isCo == true){
-                    Bundle myBundle = new Bundle();
-                    myBundle.putString("nom",nom);
-                    myBundle.putString("prenom",prenom);
-
-                    Intent versAcceuil= new Intent(this,ListEspaces.class);
-                    versAcceuil.putExtras(myBundle);
-                    startActivity(versAcceuil);
-                }
-                else alerter("identifiants incorrectes");
-
+                //if(isCo == false) alerter("identifiants incorrectes");
                 break;
             case R.id.buttonInscription:
                 Intent versSubscribe= new Intent(this,inscription.class);

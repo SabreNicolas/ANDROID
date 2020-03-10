@@ -118,10 +118,8 @@ public class GlobalState extends Application {
     public String requete(String qs) {
         if (qs != null)
         {
-            String urlData = settings.getString("urlData","http://10.0.2.2:8888/API_ANDROID/");
-
             try {
-                URL url = new URL(urlData + qs);
+                URL url = new URL(URL + qs);
                 Log.i(CAT,"url utilisée : " + url.toString());
                 HttpURLConnection urlConnection = null;
                 urlConnection = (HttpURLConnection) url.openConnection();
