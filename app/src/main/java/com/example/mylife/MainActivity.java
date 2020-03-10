@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
@@ -22,6 +23,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import classBDD.User;
+
+import static java.lang.System.exit;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -31,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnConnexion;
     private Button btnInscription;
     private boolean isCo = false;
+    private final String URL = "http://10.0.2.2:8888/API_ANDROID/";
+    private String nom;
+    private String prenom;
 
 
 
@@ -46,9 +58,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         protected JSONObject doInBackground(String... qs) {
             // pas d'interaction avec l'UI Thread ici
             // On exécute la requete
-            String res = MainActivity.this.gs.requete(qs[0]);
+            //String res = MainActivity.this.gs.requete(qs[0]);
+            String res = null;
             try {
-                JSONObject json = new JSONObject(res);
+                res = MainActivity.this.gs.sendGet(qs[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                JSONArray jsonTab = new JSONArray(res);
+                //System.out.println("je récupère : " + jsonTab);
+                JSONObject json = jsonTab.getJSONObject(0);
+                isCo = true;
                 return json;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -57,15 +78,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         protected void onPostExecute(JSONObject json) { // S’exécute dans l’UI Thread
-            //try {
-                //JSONArray jsa = json.getJSONArray("connexion");
-                //JSONObject co = jsa.getJSONObject(0);
+            if (json != null) {
+                super.onPostExecute(json);
 
-                //MainActivity.this.gs.alerter("promo : "+ json.getString("promo"));
-                //MainActivity.this.gs.alerter("prof 1 : "+ prof1.getString("prenom"));
+                try {
+                    nom = json.getString("nom");
+                    prenom= json.getString("prenom");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 String s = json.toString();
-                MainActivity.this.gs.alerter(MainActivity.this.gs.jsonToPrettyFormat(s));
+                //MainActivity.this.gs.alerter(MainActivity.this.gs.jsonToPrettyFormat(s));
 
                 Gson gson = new GsonBuilder()
                         .serializeNulls()
@@ -73,12 +97,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setPrettyPrinting()
                         .create();
 
-                //Promo p = gson.fromJson(s,Promo.class);
-                //MainActivity.this.gs.alerter(p.toString());
-
-            //} catch (JSONException e) {
-                //e.printStackTrace();
-            //}
+                User u = gson.fromJson(s, User.class);
+                MainActivity.this.gs.alerter(u.toString());
+            }
         }
     }
     GlobalState gs;
@@ -97,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnInscription.setOnClickListener(this);
         gs = (GlobalState) getApplication();
     }
+
+
 
     @Override
     protected void onStart() {
@@ -142,13 +165,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 JSONAsyncTask jsAT = new JSONAsyncTask();
                 jsAT.execute("/users/" + login+"/"+passwd);
-                //String response = connexion(login,passwd);
-                isCo = true;
-
 
                 if (isCo == true){
                     Bundle myBundle = new Bundle();
-                    myBundle.putString("login",login);
+                    myBundle.putString("nom",nom);
+                    myBundle.putString("prenom",prenom);
 
                     Intent versAcceuil= new Intent(this,ListEspaces.class);
                     versAcceuil.putExtras(myBundle);

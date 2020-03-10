@@ -27,6 +27,7 @@ public class GlobalState extends Application {
 
     private static final String CAT = "IME4";
     public SharedPreferences settings;
+    private final String URL = "http://10.0.2.2:8888/API_ANDROID/";
 
     @Override
     public void onCreate() {
@@ -117,7 +118,7 @@ public class GlobalState extends Application {
     public String requete(String qs) {
         if (qs != null)
         {
-            String urlData = settings.getString("urlData","http://localhost:8888/API_ANDROID/");
+            String urlData = settings.getString("urlData","http://10.0.2.2:8888/API_ANDROID/");
 
             try {
                 URL url = new URL(urlData + qs);
@@ -138,5 +139,35 @@ public class GlobalState extends Application {
         }
 
         return "";
+    }
+
+    public String sendGet(String requete) throws Exception {
+        if (requete != null) {
+
+            String urlData = URL + requete;
+
+            URL obj = new URL(urlData);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+            //optional default is GET
+            con.setRequestMethod("GET");
+
+            //add request header
+            con.setRequestProperty("connexion", requete);
+
+            int responseCode = con.getResponseCode();
+            System.out.println("\nSending 'GET' request to URL : " + urlData);
+            System.out.println("Response Code : " + responseCode);
+
+            InputStream in = null;
+            in = new BufferedInputStream(con.getInputStream());
+            String txtReponse = convertStreamToString(in);
+            con.disconnect();
+            System.out.println(txtReponse);
+            return txtReponse;
+
+        }
+        return "";
+
     }
 }

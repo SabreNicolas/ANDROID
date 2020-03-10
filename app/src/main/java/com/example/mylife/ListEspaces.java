@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ListEspaces extends AppCompatActivity {
@@ -16,9 +17,10 @@ public class ListEspaces extends AppCompatActivity {
         setContentView(R.layout.activity_list_espaces);
 
         Bundle b = this.getIntent().getExtras();
-        String loginRecup = b.getString("login");
-        Toast t = Toast.makeText(this,"infos récupérés = "+ loginRecup ,Toast.LENGTH_SHORT);
-        t.show();
+        String nom = b.getString("nom");
+        String prenom = b.getString("prenom");
+        TextView editTextLogin = (TextView) findViewById(R.id.login);
+        editTextLogin.setText(nom.toUpperCase() + " "+ prenom);
     }
 
     @Override
