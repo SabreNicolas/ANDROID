@@ -29,9 +29,9 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
     private EditText editTextPasswd;
     private EditText editTextPasswdConfirm;
     private Button btnSubscibe;
-    private User u;
-    private String nomu;
-    private String prenomu;
+    public User u;
+    private String nom;
+    private String prenom;
 
     class JSONAsyncTask extends AsyncTask<String, Void, JSONObject> {
         // Params, Progress, Result
@@ -48,7 +48,7 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
             String res = null;
             try {
                 System.out.println("********** dans le try");
-                res = inscription.this.gs.requete(qs[0]);
+                res = inscription.this.gs.sendPost(qs[0]);
                 System.out.println("******"+res);
                 System.out.println("********** après le sendPOST");
 
@@ -66,31 +66,35 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
 
         protected void onPostExecute(JSONObject json) { // S’exécute dans l’UI Thread
             if (json != null) {
-                super.onPostExecute(json);
+                //super.onPostExecute(json);
 
+                JSONArray jsa = null;
+                try {
+                    jsa = json.getJSONArray("user");
+                    JSONObject user = jsa.getJSONObject(0);
+                    String s = user.toString();
 
-                String s = json.toString();
-                inscription.this.gs.alerter(inscription.this.gs.jsonToPrettyFormat(s));
+                    Gson gson = new GsonBuilder()
+                            .serializeNulls()
+                            .disableHtmlEscaping()
+                            .setPrettyPrinting()
+                            .create();
 
-                Gson gson = new GsonBuilder()
-                        .serializeNulls()
-                        .disableHtmlEscaping()
-                        .setPrettyPrinting()
-                        .create();
+                    u = gson.fromJson(s, User.class);
+                    nom = u.getNom();
+                    prenom = u.getPrenom();
 
-                /*u = gson.fromJson(s, User.class);
-                nomu = u.getNom();
-                prenomu = u.getPrenom();
+                    Bundle myBundle = new Bundle();
+                    myBundle.putString("nom",nom);
+                    myBundle.putString("prenom",prenom);
 
-                Bundle myBundle = new Bundle();
-                myBundle.putString("nom",nomu);
-                myBundle.putString("prenom",prenomu);*/
+                    Intent versAcceuil= new Intent(gs,ListEspaces.class);
+                    versAcceuil.putExtras(myBundle);
+                    startActivity(versAcceuil);
 
-                Intent versAcceuil= new Intent(gs,MainActivity.class);
-                //versAcceuil.putExtras(myBundle);
-                startActivity(versAcceuil);
-
-                //MainActivity.this.gs.alerter(u.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -166,7 +170,7 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
                 }
 
                 JSONAsyncTask jsAT = new JSONAsyncTask();
-                jsAT.execute("?nom=" +nom+"&prenom="+prenom+"&login="+login+"&passwd="+passwd);
+                jsAT.execute("/users?nom=" +nom+"&prenom="+prenom+"&login="+login+"&passwd="+passwd);
                 break;
             default:    alerter("cas non prévu");
         }

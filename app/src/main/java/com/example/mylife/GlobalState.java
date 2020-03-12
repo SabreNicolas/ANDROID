@@ -31,7 +31,6 @@ public class GlobalState extends Application {
     private static final String CAT = "IME4";
     public SharedPreferences settings;
     private final String URL = "http://10.0.2.2:8888/API_ANDROID/";
-    private final String URLusers = "http://10.0.2.2:8888/API_ANDROID/users";
 
     @Override
     public void onCreate() {
@@ -119,7 +118,7 @@ public class GlobalState extends Application {
         return bStatut;
     }
 
-    public String requete(String qs) {
+    /*public String requete(String qs) {
         if (qs != null)
         {
             try {
@@ -141,12 +140,11 @@ public class GlobalState extends Application {
         }
 
         return "";
-    }
+    }*/
 
     public String sendPost(String requete) throws Exception {
         if (requete != null) {
-            String urlPost = "http://10.0.2.2:8888/API_ANDROID/users";
-            URL obj = new URL(urlPost);
+            URL obj = new URL(URL + requete);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
             //add reuqest header
@@ -154,18 +152,12 @@ public class GlobalState extends Application {
             con.setRequestProperty("inscription", requete);
             con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-            String urlParameters = requete;
-
             //Send post request
             con.setDoOutput(true);
-            DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-            wr.writeBytes(urlParameters);
-            wr.flush();
-            wr.close();
 
             int responseCode = con.getResponseCode();
-            System.out.println("\nSending 'POST' request to URL : " + obj+requete);
-            System.out.println("Post parameters : " + urlParameters);
+            System.out.println("\nSending 'POST' request to URL : " + obj);
+            //System.out.println("Post parameters : " + urlParameters);
             System.out.println("Response Code : " + responseCode);
 
             InputStream in = null;
@@ -173,7 +165,6 @@ public class GlobalState extends Application {
             String txtReponse = convertStreamToString(in);
             con.disconnect();
 
-            System.out.println("*************reponse : "+txtReponse);
             return txtReponse;
         }
         return "";

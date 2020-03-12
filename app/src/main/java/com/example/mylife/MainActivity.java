@@ -23,14 +23,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import classBDD.User;
 
-import static java.lang.System.exit;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -39,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText editTextPasswd;
     private Button btnConnexion;
     private Button btnInscription;
-    private User u;
+    public User u;
     private String nom;
     private String prenom;
     private boolean isCo = false;
