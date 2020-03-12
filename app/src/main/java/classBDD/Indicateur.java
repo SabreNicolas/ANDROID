@@ -6,7 +6,7 @@ public class Indicateur {
     private String nomIndicateur;
     private String type;
     private String valeurInit;
-    private Integer idEspace;
+    private Integer idUser;
 
     public Integer getId() {
         return id;
@@ -40,12 +40,12 @@ public class Indicateur {
         this.valeurInit = valeurInit;
     }
 
-    public Integer getIdEspace() {
-        return idEspace;
+    public Integer getIdUser() {
+        return idUser;
     }
 
-    public void setIdEspace(Integer idEspace) {
-        this.idEspace = idEspace;
+    public void setIdUser(Integer idUser) {
+        this.idUser = idUser;
     }
 
     @Override
@@ -55,7 +55,7 @@ public class Indicateur {
                 ", nomIndicateur='" + nomIndicateur + '\'' +
                 ", type='" + type + '\'' +
                 ", valeurInit='" + valeurInit + '\'' +
-                ", idEspace=" + idEspace +
+                ", idEspace=" + idUser +
                 '}';
     }
 }

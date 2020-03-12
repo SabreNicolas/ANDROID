@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -47,9 +48,10 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
             String res = null;
             try {
                 System.out.println("********** dans le try");
-                res = inscription.this.gs.sendPost(qs[0]);
+                res = inscription.this.gs.requete(qs[0]);
+                System.out.println("******"+res);
                 System.out.println("********** après le sendPOST");
-                System.out.println(res);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -66,8 +68,9 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
             if (json != null) {
                 super.onPostExecute(json);
 
+
                 String s = json.toString();
-                //MainActivity.this.gs.alerter(MainActivity.this.gs.jsonToPrettyFormat(s));
+                inscription.this.gs.alerter(inscription.this.gs.jsonToPrettyFormat(s));
 
                 Gson gson = new GsonBuilder()
                         .serializeNulls()
@@ -98,6 +101,12 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inscription);
+        if (android.os.Build.VERSION.SDK_INT > 9)
+        {
+            StrictMode.ThreadPolicy policy = new
+                    StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
         editTextNom = (EditText) findViewById(R.id.editTextNom);
         editTextNom.setOnClickListener(this);
         editTextPrenom = (EditText) findViewById(R.id.editTextPrenom);
