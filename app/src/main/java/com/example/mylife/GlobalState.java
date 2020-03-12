@@ -165,6 +165,7 @@ public class GlobalState extends Application {
             String txtReponse = convertStreamToString(in);
             con.disconnect();
 
+            System.out.println(txtReponse);
             return txtReponse;
         }
         return "";

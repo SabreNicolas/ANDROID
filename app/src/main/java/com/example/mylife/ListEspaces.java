@@ -3,13 +3,90 @@ package com.example.mylife;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import classBDD.Espace;
+import classBDD.User;
+
 public class ListEspaces extends AppCompatActivity {
+    private String nom;
+    private String prenom;
+    private Integer id;
+    private List listEspaces;
+
+
+    class JSONAsyncTask extends AsyncTask<String, Void, JSONObject> {
+        // Params, Progress, Result
+
+        @Override
+        protected void onPreExecute() { // S’exécute dans l’UI Thread
+            super.onPreExecute();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... qs) {
+            // pas d'interaction avec l'UI Thread ici
+            // On exécute la requete
+            //String res = MainActivity.this.gs.requete(qs[0]);
+            String res = null;
+            try {
+                res = ListEspaces.this.gs.sendGet(qs[0]);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                JSONObject json = new JSONObject(res);
+                return json;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(JSONObject json) { // S’exécute dans l’UI Thread
+            if (json != null) {
+                super.onPostExecute(json);
+
+                Gson gson = new GsonBuilder()
+                        .serializeNulls()
+                        .disableHtmlEscaping()
+                        .setPrettyPrinting()
+                        .create();
+
+                try {
+                    JSONArray jsa = json.getJSONArray("espaces");
+                    for (int i = 0; i < jsa.length(); i++) {
+                        JSONObject espace = jsa.getJSONObject(i);
+
+                        String s = espace.toString();
+                        Espace e  = gson.fromJson(s, Espace.class);
+                        listEspaces.add(e);
+                    }
+                    showEspaces();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+    GlobalState gs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,10 +94,20 @@ public class ListEspaces extends AppCompatActivity {
         setContentView(R.layout.activity_list_espaces);
 
         Bundle b = this.getIntent().getExtras();
-        String nom = b.getString("nom");
-        String prenom = b.getString("prenom");
+        User u = b.getParcelable("user");
+        nom = u.getNom();
+        prenom = u.getPrenom();
+        id = u.getId();
+        System.out.println(u.toString());
         TextView editTextLogin = (TextView) findViewById(R.id.login);
         editTextLogin.setText(nom.toUpperCase() + " "+ prenom);
+
+        gs = (GlobalState) getApplication();
+        listEspaces = new ArrayList<Espace>();
+
+        ListEspaces.JSONAsyncTask jsAT = new JSONAsyncTask();
+        jsAT.execute("espacesUser/" + id+"/espaces");
+
     }
 
     @Override
@@ -58,5 +145,9 @@ public class ListEspaces extends AppCompatActivity {
             case R.id.action_account : break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showEspaces() {
+        System.out.println("j'ai fini mon traitement et je viens de créer la liste d'espace : "+listEspaces);
     }
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
@@ -29,9 +30,7 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
     private EditText editTextPasswd;
     private EditText editTextPasswdConfirm;
     private Button btnSubscibe;
-    public User u;
-    private String nom;
-    private String prenom;
+    private User u;
 
     class JSONAsyncTask extends AsyncTask<String, Void, JSONObject> {
         // Params, Progress, Result
@@ -81,12 +80,9 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
                             .create();
 
                     u = gson.fromJson(s, User.class);
-                    nom = u.getNom();
-                    prenom = u.getPrenom();
 
                     Bundle myBundle = new Bundle();
-                    myBundle.putString("nom",nom);
-                    myBundle.putString("prenom",prenom);
+                    myBundle.putParcelable("user", u);
 
                     Intent versAcceuil= new Intent(gs,ListEspaces.class);
                     versAcceuil.putExtras(myBundle);

@@ -34,9 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText editTextPasswd;
     private Button btnConnexion;
     private Button btnInscription;
-    public User u;
-    private String nom;
-    private String prenom;
+    private User u;
     private boolean isCo = false;
 
 
@@ -87,12 +85,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .create();
 
                 u = gson.fromJson(s, User.class);
-                nom = u.getNom();
-                prenom = u.getPrenom();
 
                 Bundle myBundle = new Bundle();
-                myBundle.putString("nom",nom);
-                myBundle.putString("prenom",prenom);
+                myBundle.putParcelable("user",u);
 
                 Intent versAcceuil= new Intent(gs,ListEspaces.class);
                 versAcceuil.putExtras(myBundle);
