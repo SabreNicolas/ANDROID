@@ -2,11 +2,21 @@ package com.example.mylife;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.MatrixCursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +38,10 @@ public class ListEspaces extends AppCompatActivity {
     private String nom;
     private String prenom;
     private Integer id;
-    private List listEspaces;
+    private List<Espace> listEspaces;
+    private Button btnColEdit;
+    private Button btnColDelete;
+    private ListView lv;
 
 
     class JSONAsyncTask extends AsyncTask<String, Void, JSONObject> {
@@ -149,5 +162,34 @@ public class ListEspaces extends AppCompatActivity {
 
     public void showEspaces() {
         System.out.println("j'ai fini mon traitement et je viens de créer la liste d'espace : "+listEspaces);
+        afficherEspaces();
     }
+
+    public void afficherEspaces(){
+        String[] columns = new String[] { "_id", "nomEspaces", "edit" , "delete"};
+        MatrixCursor matrixCursor= new MatrixCursor(columns);
+        startManagingCursor(matrixCursor);
+        for(Espace e:listEspaces){
+            matrixCursor.addRow(new Object[] {e.getId(), e.getNomEspace(),"EDIT","DELETE"});
+        }
+        String[] from = new String[] {"nomEspaces", "edit","delete"};
+        int[] to = new int[] { R.id.textBtnCol1, R.id.textBtnCol2,R.id.textBtnCol3};
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.row_item, matrixCursor, from, to, 0);
+        lv = (ListView) findViewById(R.id.lv);
+        lv.setAdapter(adapter);
+
+
+        //Gestion des clics sur les lignes
+        AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View container, int position, long id) {
+                // faites ici ce que vous voulez
+                //lv.getPositionForView(container);
+                System.out.println("click sur : " + id);
+            }
+
+        };
+        lv.setOnItemClickListener(itemClickListener);
+    }
+
 }
