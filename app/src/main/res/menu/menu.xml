@@ -10,15 +10,21 @@
         android:id="@+id/addIndicateur"
         app:showAsAction="never"
         android:title="Ajouter un indicateur"/>
+
     <item
-        android:id="@+id/gestionIndicateur"
+        android:id="@+id/listIndicateur"
         app:showAsAction="never"
-        android:title="Gestion des indicateurs"/>
+        android:title="Lister les indicateurs"/>
 
     <item
         android:id="@+id/addEspace"
         app:showAsAction="never"
         android:title="Ajouter un espace"/>
+
+    <item
+        android:id="@+id/listEspace"
+        app:showAsAction="never"
+        android:title="Lister les espaces"/>
 
     <item
         android:id="@+id/action_settings"

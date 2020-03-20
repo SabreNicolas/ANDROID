@@ -38,6 +38,7 @@ public class ListEspaces extends AppCompatActivity {
     private String nom;
     private String prenom;
     private Integer id;
+    private User u;
     private List<Espace> listEspaces;
     private Button btnColEdit;
     private Button btnColDelete;
@@ -107,7 +108,7 @@ public class ListEspaces extends AppCompatActivity {
         setContentView(R.layout.activity_list_espaces);
 
         Bundle b = this.getIntent().getExtras();
-        User u = b.getParcelable("user");
+        u = b.getParcelable("user");
         nom = u.getNom();
         prenom = u.getPrenom();
         id = u.getId();
@@ -144,10 +145,14 @@ public class ListEspaces extends AppCompatActivity {
                 Intent versaddIndicateur = new Intent(this, addIndicateur.class);
                 startActivity(versaddIndicateur);
                 break;
-            case R.id.gestionIndicateur :
-                // affiche de l'activité liste Indicateur
-                Intent verslistIndicateurs = new Intent(this, ListIndicateurs.class);
-                startActivity(verslistIndicateurs);
+            case R.id.listIndicateur :
+                // affiche la liste des indicateurs de l'user
+                Bundle myBundle = new Bundle();
+                myBundle.putParcelable("user",u);
+
+                Intent listIndicateurs= new Intent(this,ListIndicateurs.class);
+                listIndicateurs.putExtras(myBundle);
+                startActivity(listIndicateurs);
                 break;
             case R.id.addEspace :
                 // affiche de l'activité add Espace
@@ -178,14 +183,12 @@ public class ListEspaces extends AppCompatActivity {
         lv = (ListView) findViewById(R.id.lv);
         lv.setAdapter(adapter);
 
-
         //Gestion des clics sur les lignes
         AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View container, int position, long id) {
-                // faites ici ce que vous voulez
-                //lv.getPositionForView(container);
                 System.out.println("click sur : " + id);
+                System.out.println("position : " + position);
             }
 
         };
