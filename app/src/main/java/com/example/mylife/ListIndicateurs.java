@@ -105,13 +105,14 @@ public class ListIndicateurs extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_indicateurs);
+        gs = (GlobalState) getApplication();
 
-        Bundle b = this.getIntent().getExtras();
-        u = b.getParcelable("user");
+
+        u = gs.getUser();
         id = u.getId();
         System.out.println(u.toString());
 
-        gs = (GlobalState) getApplication();
+
         listIndicateurs = new ArrayList<Indicateur>();
 
         ListIndicateurs.JSONAsyncTask jsAT = new JSONAsyncTask();
@@ -142,11 +143,7 @@ public class ListIndicateurs extends AppCompatActivity {
                 break;
             case R.id.listIndicateur :
                 // affiche la liste des indicateurs de l'user
-                Bundle myBundleIndicateur = new Bundle();
-                myBundleIndicateur.putParcelable("user",u);
-
                 Intent listIndicateurs= new Intent(this,ListIndicateurs.class);
-                listIndicateurs.putExtras(myBundleIndicateur);
                 startActivity(listIndicateurs);
                 break;
             case R.id.addEspace :
@@ -156,11 +153,7 @@ public class ListIndicateurs extends AppCompatActivity {
                 break;
             case R.id.listEspace:
                 // affiche la liste des indicateurs de l'user
-                Bundle myBundleEspace = new Bundle();
-                myBundleEspace.putParcelable("user",u);
-
                 Intent listEspaces= new Intent(this,ListEspaces.class);
-                listEspaces.putExtras(myBundleEspace);
                 startActivity(listEspaces);
                 break;
             case R.id.action_settings : break;

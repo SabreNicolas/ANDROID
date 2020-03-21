@@ -106,9 +106,9 @@ public class ListEspaces extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_espaces);
+        gs = (GlobalState) getApplication();
 
-        Bundle b = this.getIntent().getExtras();
-        u = b.getParcelable("user");
+        u = gs.getUser();
         nom = u.getNom();
         prenom = u.getPrenom();
         id = u.getId();
@@ -116,7 +116,7 @@ public class ListEspaces extends AppCompatActivity {
         TextView editTextLogin = (TextView) findViewById(R.id.login);
         editTextLogin.setText(nom.toUpperCase() + " "+ prenom);
 
-        gs = (GlobalState) getApplication();
+
         listEspaces = new ArrayList<Espace>();
 
         ListEspaces.JSONAsyncTask jsAT = new JSONAsyncTask();
@@ -147,17 +147,18 @@ public class ListEspaces extends AppCompatActivity {
                 break;
             case R.id.listIndicateur :
                 // affiche la liste des indicateurs de l'user
-                Bundle myBundle = new Bundle();
-                myBundle.putParcelable("user",u);
-
                 Intent listIndicateurs= new Intent(this,ListIndicateurs.class);
-                listIndicateurs.putExtras(myBundle);
                 startActivity(listIndicateurs);
                 break;
             case R.id.addEspace :
                 // affiche de l'activité add Espace
                 Intent versaddEspace = new Intent(this, addEspace.class);
                 startActivity(versaddEspace);
+                break;
+            case R.id.listEspace:
+                // affiche la liste des indicateurs de l'user
+                Intent listEspaces= new Intent(this,ListEspaces.class);
+                startActivity(listEspaces);
                 break;
             case R.id.action_settings : break;
             case R.id.action_account : break;

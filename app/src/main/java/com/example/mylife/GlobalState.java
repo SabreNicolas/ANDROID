@@ -26,11 +26,14 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import classBDD.User;
+
 public class GlobalState extends Application {
 
     private static final String CAT = "IME4";
     public SharedPreferences settings;
     private final String URL = "http://10.0.2.2:8888/API_ANDROID/";
+    private User user;
 
     @Override
     public void onCreate() {
@@ -118,29 +121,6 @@ public class GlobalState extends Application {
         return bStatut;
     }
 
-    /*public String requete(String qs) {
-        if (qs != null)
-        {
-            try {
-                URL url = new URL(URLusers + qs);
-                System.out.println("url utilisée : " + url.toString());
-                HttpURLConnection urlConnection = null;
-                urlConnection = (HttpURLConnection) url.openConnection();
-                InputStream in = null;
-                in = new BufferedInputStream(urlConnection.getInputStream());
-                String txtReponse = convertStreamToString(in);
-                urlConnection.disconnect();
-                return txtReponse;
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        return "";
-    }*/
 
     public String sendPost(String requete) throws Exception {
         if (requete != null) {
@@ -201,5 +181,13 @@ public class GlobalState extends Application {
         }
         return "";
 
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

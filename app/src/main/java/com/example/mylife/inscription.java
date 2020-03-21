@@ -46,10 +46,7 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
             // On exécute la requete
             String res = null;
             try {
-                System.out.println("********** dans le try");
                 res = inscription.this.gs.sendPost(qs[0]);
-                System.out.println("******"+res);
-                System.out.println("********** après le sendPOST");
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -81,11 +78,9 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
 
                     u = gson.fromJson(s, User.class);
 
-                    Bundle myBundle = new Bundle();
-                    myBundle.putParcelable("user", u);
+                    gs.setUser(u);
 
                     Intent versAcceuil= new Intent(gs,ListEspaces.class);
-                    versAcceuil.putExtras(myBundle);
                     startActivity(versAcceuil);
 
                 } catch (JSONException e) {

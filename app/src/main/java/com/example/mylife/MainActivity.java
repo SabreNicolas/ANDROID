@@ -85,12 +85,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .create();
 
                 u = gson.fromJson(s, User.class);
-
-                Bundle myBundle = new Bundle();
-                myBundle.putParcelable("user",u);
-
+                gs.setUser(u);
                 Intent versAcceuil= new Intent(gs,ListEspaces.class);
-                versAcceuil.putExtras(myBundle);
                 startActivity(versAcceuil);
 
                 //MainActivity.this.gs.alerter(u.toString());
