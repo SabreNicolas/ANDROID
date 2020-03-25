@@ -44,7 +44,7 @@ public class addEspace extends AppCompatActivity implements View.OnClickListener
             // On exécute la requete
             String res = null;
             try {
-                res = addEspace.this.gs.sendPost(qs[0]);
+                res = addEspace.this.gs.requete(qs[0],"POST");
 
             } catch (Exception e) {
                 e.printStackTrace();

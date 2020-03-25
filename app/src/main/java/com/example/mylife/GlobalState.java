@@ -122,22 +122,23 @@ public class GlobalState extends Application {
     }
 
 
-    public String sendPost(String requete) throws Exception {
+    public String requete(String requete, String type) throws Exception {
         if (requete != null) {
             URL obj = new URL(URL + requete);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
             //add reuqest header
-            con.setRequestMethod("POST");
-            con.setRequestProperty("inscription", requete);
-            con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+            con.setRequestMethod(type);
+            con.setRequestProperty("requete", requete);
+            //con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
             //Send post request
-            con.setDoOutput(true);
+            if(type.equals("POST")){
+                con.setDoOutput(true);
+            }
 
             int responseCode = con.getResponseCode();
-            System.out.println("\nSending 'POST' request to URL : " + obj);
-            //System.out.println("Post parameters : " + urlParameters);
+            System.out.println("\nSending '"+type+"' request to URL : " + obj);
             System.out.println("Response Code : " + responseCode);
 
             InputStream in = null;
@@ -151,9 +152,37 @@ public class GlobalState extends Application {
         return "";
     }
 
+    /*public String sendPost(String requete) throws Exception {
+        if (requete != null) {
+            URL obj = new URL(URL + requete);
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+            //add reuqest header
+            con.setRequestMethod("POST");
+            con.setRequestProperty("requete", requete);
+            con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+
+            //Send post request
+            con.setDoOutput(true);
+
+            int responseCode = con.getResponseCode();
+            System.out.println("\nSending 'POST' request to URL : " + obj);
+            System.out.println("Response Code : " + responseCode);
+
+            InputStream in = null;
+            in = new BufferedInputStream(con.getInputStream());
+            String txtReponse = convertStreamToString(in);
+            con.disconnect();
+
+            System.out.println(txtReponse);
+            return txtReponse;
+        }
+        return "";
+    }*/
 
 
-    public String sendGet(String requete) throws Exception {
+
+    /*public String sendGet(String requete) throws Exception {
         if (requete != null) {
 
             String urlData = URL + requete;
@@ -165,7 +194,7 @@ public class GlobalState extends Application {
             con.setRequestMethod("GET");
 
             //add request header
-            con.setRequestProperty("connexion", requete);
+            con.setRequestProperty("requete", requete);
 
             int responseCode = con.getResponseCode();
             System.out.println("\nSending 'GET' request to URL : " + urlData);
@@ -181,7 +210,7 @@ public class GlobalState extends Application {
         }
         return "";
 
-    }
+    }*/
 
     public User getUser() {
         return user;

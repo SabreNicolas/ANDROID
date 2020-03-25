@@ -46,7 +46,7 @@ public class inscription extends AppCompatActivity implements View.OnClickListen
             // On exécute la requete
             String res = null;
             try {
-                res = inscription.this.gs.sendPost(qs[0]);
+                res = inscription.this.gs.requete(qs[0],"POST");
 
             } catch (Exception e) {
                 e.printStackTrace();
