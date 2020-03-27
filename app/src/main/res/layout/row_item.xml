@@ -3,34 +3,44 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="3"> <!-- nombre de colonnes -->
+    android:weightSum="4"> <!-- nombre de colonnes -->
 
     <TextView
         android:id="@+id/textBtnCol1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Large Text"
-        android:textColor="@color/black"
-        android:textSize="20dp"
+        android:layout_width="561dp"
+        android:layout_height="45dp"
         android:layout_weight="1"
         android:gravity="center"
         android:padding="4dp"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:text="Large Text"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/black"
+        android:textSize="13dp"
+        android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textBtnCol2"
+    <ImageButton
+        android:id="@+id/complete_btn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Large Text"
         android:layout_weight="1"
         android:gravity="center"
+        android:src="@drawable/clipboard"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <TextView
-        android:id="@+id/textBtnCol3"
+    <ImageButton
+        android:id="@+id/edit_btn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Large Text"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:src="@drawable/pencil"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ImageButton
+        android:id="@+id/delete_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/delete"
         android:layout_weight="1"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall" />

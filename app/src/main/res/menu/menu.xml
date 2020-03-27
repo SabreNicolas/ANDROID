@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/listEspace"
+        app:showAsAction="never"
+        android:title="Acceuil"/>
+
+    <item
         android:id="@+id/action_historique"
         app:showAsAction="never"
         android:title="Historique"/>
@@ -20,11 +25,6 @@
         android:id="@+id/addEspace"
         app:showAsAction="never"
         android:title="Ajouter un espace"/>
-
-    <item
-        android:id="@+id/listEspace"
-        app:showAsAction="never"
-        android:title="Lister les espaces"/>
 
     <item
         android:id="@+id/action_settings"

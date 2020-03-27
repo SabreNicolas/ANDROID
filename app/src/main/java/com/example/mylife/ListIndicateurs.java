@@ -2,23 +2,17 @@ package com.example.mylife;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.MatrixCursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,18 +21,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import classBDD.Espace;
 import classBDD.Indicateur;
 import classBDD.User;
 
 public class ListIndicateurs extends AppCompatActivity {
     private Integer id;
     private User u;
-    private List<Indicateur> listIndicateurs;
+    private ArrayList<Indicateur> listIndicateurs;
     private Button btnColEdit;
     private Button btnColDelete;
     private ListView lv;
@@ -164,34 +156,13 @@ public class ListIndicateurs extends AppCompatActivity {
 
     public void showIndicateurs() {
         System.out.println("j'ai fini mon traitement et je viens de créer la liste d'indicateurs : "+listIndicateurs);
-        afficherEspaces();
+        afficherIndicateurs();
     }
 
-    public void afficherEspaces(){
-        String[] columns = new String[] { "_id", "nomIndicateurs", "edit" , "delete"};
-        MatrixCursor matrixCursor= new MatrixCursor(columns);
-        startManagingCursor(matrixCursor);
-        for(Indicateur e:listIndicateurs){
-            matrixCursor.addRow(new Object[] {e.getId(), e.getNomIndicateur(),"EDIT","DELETE"});
-        }
-        String[] from = new String[] {"nomIndicateurs", "edit","delete"};
-        int[] to = new int[] { R.id.textBtnCol1, R.id.textBtnCol2,R.id.textBtnCol3};
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, R.layout.row_item, matrixCursor, from, to, 0);
+    public void afficherIndicateurs(){
         lv = (ListView) findViewById(R.id.lvIndicateurs);
-        lv.setAdapter(adapter);
-
-
-        //Gestion des clics sur les lignes
-        AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View container, int position, long id) {
-                // faites ici ce que vous voulez
-                //lv.getPositionForView(container);
-                System.out.println("click sur : " + id);
-            }
-
-        };
-        lv.setOnItemClickListener(itemClickListener);
+        MyCustomAdapter adapterNext = new MyCustomAdapter(listIndicateurs, this,gs);
+        lv.setAdapter(adapterNext);
     }
 
 }

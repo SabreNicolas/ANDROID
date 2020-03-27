@@ -26,6 +26,8 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import classBDD.Espace;
+import classBDD.Indicateur;
 import classBDD.User;
 
 public class GlobalState extends Application {
@@ -34,6 +36,8 @@ public class GlobalState extends Application {
     public SharedPreferences settings;
     private final String URL = "http://10.0.2.2:8888/API_ANDROID/";
     private User user;
+    private Espace espace;
+    private Indicateur indicateur;
 
     @Override
     public void onCreate() {
@@ -133,7 +137,7 @@ public class GlobalState extends Application {
             //con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
             //Send post request
-            if(type.equals("POST")){
+            if(type.equals("POST") || type.equals("DELETE")){
                 con.setDoOutput(true);
             }
 
@@ -218,5 +222,21 @@ public class GlobalState extends Application {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Espace getEspace() {
+        return espace;
+    }
+
+    public void setEspace(Espace espace) {
+        this.espace = espace;
+    }
+
+    public Indicateur getIndicateur() {
+        return indicateur;
+    }
+
+    public void setIndicateur(Indicateur indicateur) {
+        this.indicateur = indicateur;
     }
 }

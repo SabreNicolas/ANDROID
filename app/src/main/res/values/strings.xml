@@ -20,6 +20,8 @@
     <string name="nameEspace">Nom espace :</string>
     <string name="choiseType">Choissisez un type</string>
     <string name="historic">Voir historique de ce jour</string>
+    <string name="delete">X</string>
+    <string name="edit">EDIT</string>
 
     <string-array name="type_arrays">
         <item>Input</item>
