@@ -13,10 +13,10 @@
     <string name="messInscription">Vous n\'avez pas de compte ?</string>
     <string name="mesEspaces">Mes Espaces</string>
     <string name="mesIndicateurs">Mes Indicateurs</string>
-    <string name="addIndicateur">Ajout d\'un indicateur</string>
+    <string name="addIndicateur">Mon indicateur</string>
     <string name="nameIndicateur">Nom indicateur :</string>
     <string name="type">Type :</string>
-    <string name="addEspace">Ajout d\'un espace</string>
+    <string name="addEspace">Mon espace</string>
     <string name="nameEspace">Nom espace :</string>
     <string name="choiseType">Choissisez un type</string>
     <string name="historic">Voir historique de ce jour</string>

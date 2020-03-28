@@ -53,7 +53,7 @@ public class ListEspaces extends AppCompatActivity {
             //String res = MainActivity.this.gs.requete(qs[0]);
             String res = null;
             try {
-                res = ListEspaces.this.gs.requete(qs[0],"GET");
+                res = ListEspaces.this.gs.requete(qs[0],"GET",null);
             } catch (Exception e) {
                 e.printStackTrace();
             }

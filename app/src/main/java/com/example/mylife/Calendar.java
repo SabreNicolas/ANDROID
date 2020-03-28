@@ -39,7 +39,7 @@ public class Calendar extends AppCompatActivity implements View.OnClickListener{
         btnHistoric.setOnClickListener(this);
 
         getDateJour();
-
+        dateFormatted = dateJourFormatted;
 
         mCalendarView.setOnDayClickListener(new OnDayClickListener() {
 
@@ -77,10 +77,6 @@ public class Calendar extends AppCompatActivity implements View.OnClickListener{
                 //recuperer le jour sélectionné saisi , s'il n'est pas vide changer d'activité
                 //et afficher historique de ce jour
 
-                if(dateFormatted.isEmpty()){
-                    alerter("Choisir une date");
-                    return;
-                }
                 Bundle myBundle = new Bundle();
                 myBundle.putString("date",dateFormatted);
 

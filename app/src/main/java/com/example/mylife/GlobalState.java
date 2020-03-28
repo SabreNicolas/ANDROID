@@ -20,6 +20,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -35,9 +36,9 @@ public class GlobalState extends Application {
     private static final String CAT = "IME4";
     public SharedPreferences settings;
     private final String URL = "http://10.0.2.2:8888/API_ANDROID/";
-    private User user;
-    private Espace espace;
-    private Indicateur indicateur;
+    private User user = null;
+    private Espace espace = null ;
+    private Indicateur indicateur = null;
 
     @Override
     public void onCreate() {
@@ -126,7 +127,7 @@ public class GlobalState extends Application {
     }
 
 
-    public String requete(String requete, String type) throws Exception {
+    public String requete(String requete, String type, JSONObject reqBody) throws Exception {
         if (requete != null) {
             URL obj = new URL(URL + requete);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -136,9 +137,15 @@ public class GlobalState extends Application {
             con.setRequestProperty("requete", requete);
             //con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-            //Send post request
-            if(type.equals("POST") || type.equals("DELETE")){
+            if(type.equals("POST") || type.equals("DELETE") || type.equals("PUT")){
                 con.setDoOutput(true);
+            }
+
+            //PUT request
+            if (reqBody != null){
+                OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+                wr.write(reqBody.toString());
+                wr.flush();
             }
 
             int responseCode = con.getResponseCode();
@@ -215,6 +222,14 @@ public class GlobalState extends Application {
         return "";
 
     }*/
+
+    public void deleteEspace(){
+        this.espace = null;
+    }
+
+    public void deleteIndicateur(){
+        this.indicateur = null;
+    }
 
     public User getUser() {
         return user;

@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //String res = MainActivity.this.gs.requete(qs[0]);
             String res = null;
             try {
-                res = MainActivity.this.gs.requete(qs[0],"GET");
+                res = MainActivity.this.gs.requete(qs[0],"GET",null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -89,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent versAcceuil= new Intent(gs,ListEspaces.class);
                 startActivity(versAcceuil);
 
-                //MainActivity.this.gs.alerter(u.toString());
             }
         }
     }

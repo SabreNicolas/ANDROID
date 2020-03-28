@@ -51,7 +51,7 @@ public class ListIndicateurs extends AppCompatActivity {
             //String res = MainActivity.this.gs.requete(qs[0]);
             String res = null;
             try {
-                res = ListIndicateurs.this.gs.requete(qs[0],"GET");
+                res = ListIndicateurs.this.gs.requete(qs[0],"GET",null);
             } catch (Exception e) {
                 e.printStackTrace();
             }

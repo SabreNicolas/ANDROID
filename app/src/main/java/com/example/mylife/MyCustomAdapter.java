@@ -1,6 +1,7 @@
 package com.example.mylife;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -47,7 +48,7 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
             //String res = MainActivity.this.gs.requete(qs[0]);
             String res = null;
             try {
-                res = MyCustomAdapter.this.gs.requete(qs[0],"DELETE");
+                res = MyCustomAdapter.this.gs.requete(qs[0],"DELETE",null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -163,12 +164,14 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
                 if(type.equals("Espace")){
                     System.out.println("je vais editer espace avec id : "+id);
                     gs.setEspace((Espace) getItem(position));
-                    System.out.println(gs.getEspace());
+                    Intent versEspace= new Intent(context,addEspace.class);
+                    context.startActivity(versEspace);
                 }
                 else{
                     System.out.println("je vais editer indicateur avec id : "+id);
                     gs.setIndicateur((Indicateur) getItem(position));
-                    System.out.println(gs.getIndicateur());
+                    Intent versIndicateur= new Intent(context,addIndicateur.class);
+                    context.startActivity(versIndicateur);
                 }
                 notifyDataSetChanged();
             }

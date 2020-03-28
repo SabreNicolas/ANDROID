@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import classBDD.Espace;
 import classBDD.User;
 
 public class addEspace extends AppCompatActivity implements View.OnClickListener{
@@ -29,6 +30,9 @@ public class addEspace extends AppCompatActivity implements View.OnClickListener
     private Button btnTerminer;
     private Button btnNouvelIndicateur;
     private User user;
+    private Espace espace;
+    private String httpType;
+    private JSONObject reqBody;
 
     class JSONAsyncTask extends AsyncTask<String, Void, JSONObject> {
         // Params, Progress, Result
@@ -44,14 +48,20 @@ public class addEspace extends AppCompatActivity implements View.OnClickListener
             // On exécute la requete
             String res = null;
             try {
-                res = addEspace.this.gs.requete(qs[0],"POST");
+                res = addEspace.this.gs.requete(qs[0],httpType,reqBody);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
             try {
-                JSONArray jsonTab = new JSONArray(res);
-                JSONObject json = jsonTab.getJSONObject(0);
+                JSONObject json;
+                if(espace == null){
+                    JSONArray jsonTab = new JSONArray(res);
+                    json = jsonTab.getJSONObject(0);
+                }
+                else{
+                    json = new JSONObject(res);
+                }
                 return json;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -61,7 +71,14 @@ public class addEspace extends AppCompatActivity implements View.OnClickListener
 
         protected void onPostExecute(JSONObject json) { // S’exécute dans l’UI Thread
             if (json != null) {
-                alerter("Espace ajouté avec succès !");
+                if(espace == null){
+                    alerter("Espace ajouté avec succès !");
+                    editTextName.setText("");
+                }
+                else {
+                    alerter("Espace mis à jour avec succès !");
+                }
+
             }
         }
     }
@@ -73,12 +90,15 @@ public class addEspace extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_add_espace);
         editTextName = (EditText) findViewById(R.id.editTextNameEspace);
         editTextName.setOnClickListener(this);
-        btnTerminer = (Button) findViewById(R.id.buttonNouvelIndicateur);
-        btnTerminer.setOnClickListener(this);
         btnNouvelIndicateur = (Button) findViewById(R.id.buttonTerminerAddEspace);
         btnNouvelIndicateur.setOnClickListener(this);
         gs = (GlobalState) getApplication();
         user = gs.getUser();
+        espace = gs.getEspace();
+        gs.deleteEspace();
+        if(this.espace != null){
+            editTextName.setText(espace.getNomEspace());
+        }
     }
 
     @Override
@@ -141,11 +161,23 @@ public class addEspace extends AppCompatActivity implements View.OnClickListener
                     return;
                 }
                 JSONAsyncTask jsAT = new JSONAsyncTask();
-                jsAT.execute("/espaces/?nomEspace=" + name+"&idUser="+ user.getId());
-                break;
-            case R.id.buttonNouvelIndicateur:
-                Intent versAddIndicateur= new Intent(this,addIndicateur.class);
-                startActivity(versAddIndicateur);
+
+                if(this.espace == null){
+                    this.httpType = "POST";
+                    this.reqBody = null;
+                    jsAT.execute("/espaces/?nomEspace=" + name+"&idUser="+ user.getId());
+                }
+                else {
+                    this.httpType = "PUT";
+                    reqBody = new JSONObject();
+                    try {
+                        reqBody.put("nomEspace", name);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    jsAT.execute("/espaces/"+espace.getId());
+                }
+
                 break;
             default:    alerter("cas non prévu");
         }
