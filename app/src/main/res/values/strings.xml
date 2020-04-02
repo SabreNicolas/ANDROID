@@ -22,14 +22,22 @@
     <string name="historic">Voir historique de ce jour</string>
     <string name="delete">X</string>
     <string name="edit">EDIT</string>
+    <string name="values">Valeurs possibles :</string>
+    <string name="nbValues">Nb de valeurs possibles :</string>
 
     <string-array name="type_arrays">
-        <item>Input</item>
-        <item>ComboBox</item>
+        <item>Champ de saisie</item>
+        <item>Case à cocher</item>
+        <item>Menu déroulant</item>
+        <item>Oui ou Non</item>
         <item>Curseur</item>
-        <item>Select</item>
-        <item>CheckBox</item>
-        <item>Boolean</item>
+    </string-array>
+
+    <string-array name="listNbValues">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
     </string-array>
 
 </resources>

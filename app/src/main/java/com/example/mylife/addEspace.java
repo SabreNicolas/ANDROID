@@ -28,7 +28,6 @@ public class addEspace extends AppCompatActivity implements View.OnClickListener
     private static final String CAT = "IME";
     private EditText editTextName;
     private Button btnTerminer;
-    private Button btnNouvelIndicateur;
     private User user;
     private Espace espace;
     private String httpType;
@@ -90,8 +89,8 @@ public class addEspace extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_add_espace);
         editTextName = (EditText) findViewById(R.id.editTextNameEspace);
         editTextName.setOnClickListener(this);
-        btnNouvelIndicateur = (Button) findViewById(R.id.buttonTerminerAddEspace);
-        btnNouvelIndicateur.setOnClickListener(this);
+        btnTerminer = (Button) findViewById(R.id.buttonTerminerAddEspace);
+        btnTerminer.setOnClickListener(this);
         gs = (GlobalState) getApplication();
         user = gs.getUser();
         espace = gs.getEspace();
