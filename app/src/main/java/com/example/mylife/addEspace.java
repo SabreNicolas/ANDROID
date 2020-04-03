@@ -76,6 +76,8 @@ public class addEspace extends AppCompatActivity implements View.OnClickListener
                 }
                 else {
                     alerter("Espace mis à jour avec succès !");
+                    Intent listEspaces= new Intent(getApplicationContext(),ListEspaces.class);
+                    startActivity(listEspaces);
                 }
 
             }
@@ -132,7 +134,7 @@ public class addEspace extends AppCompatActivity implements View.OnClickListener
                 startActivity(versaddEspace);
                 break;
             case R.id.listEspace:
-                // affiche la liste des indicateurs de l'user
+                // affiche la liste des espaces de l'user
                 Intent listEspaces= new Intent(this,ListEspaces.class);
                 startActivity(listEspaces);
                 break;
