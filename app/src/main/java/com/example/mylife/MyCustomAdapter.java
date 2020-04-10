@@ -3,21 +3,14 @@ package com.example.mylife;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -132,13 +125,17 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
         ImageButton editBtn = (ImageButton)view.findViewById(R.id.edit_btn);
         ImageButton completeBtn = (ImageButton)view.findViewById(R.id.complete_btn);
 
+        if(this.type.equals("Indicateur")){
+            completeBtn.setVisibility(View.INVISIBLE);
+        }
+
         //DELETE
         deleteBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
 
                 int id = (int) getItemId(position);
-                MyCustomAdapter.JSONAsyncTask jsAT = new JSONAsyncTask();
+                JSONAsyncTask jsAT = new JSONAsyncTask();
 
                 if(type.equals("Espace")){
                     System.out.println("je vais supprimer espace avec id : "+id);
@@ -181,9 +178,12 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
         completeBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                //do something
+
                 int id = (int) getItemId(position);
-                System.out.println("COMPLETE : " + id);
+                System.out.println("je vais remplir des data pour espace avec id : "+id);
+                gs.setEspace((Espace) getItem(position));
+                Intent versAddData= new Intent(context,addData.class);
+                context.startActivity(versAddData);
                 notifyDataSetChanged();
             }
         });

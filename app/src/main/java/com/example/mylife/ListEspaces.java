@@ -105,7 +105,6 @@ public class ListEspaces extends AppCompatActivity {
         nom = u.getNom();
         prenom = u.getPrenom();
         id = u.getId();
-        System.out.println(u.toString());
         TextView editTextLogin = (TextView) findViewById(R.id.login);
         editTextLogin.setText(nom.toUpperCase() + " "+ prenom);
 

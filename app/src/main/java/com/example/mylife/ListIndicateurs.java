@@ -102,7 +102,6 @@ public class ListIndicateurs extends AppCompatActivity {
 
         u = gs.getUser();
         id = u.getId();
-        System.out.println(u.toString());
 
 
         listIndicateurs = new ArrayList<Indicateur>();
