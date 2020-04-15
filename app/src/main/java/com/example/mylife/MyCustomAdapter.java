@@ -182,7 +182,7 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
                 int id = (int) getItemId(position);
                 System.out.println("je vais remplir des data pour espace avec id : "+id);
                 gs.setEspace((Espace) getItem(position));
-                Intent versAddData= new Intent(context,addData.class);
+                Intent versAddData= new Intent(context,addDataEspace.class);
                 context.startActivity(versAddData);
                 notifyDataSetChanged();
             }

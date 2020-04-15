@@ -50,12 +50,13 @@ public class Indicateur {
 
     @Override
     public String toString() {
-        return "Indicateur{" +
+        /*return "Indicateur{" +
                 "id=" + id +
                 ", nomIndicateur='" + nomIndicateur + '\'' +
                 ", type='" + type + '\'' +
                 ", valeurInit='" + valeurInit + '\'' +
-                ", idEspace=" + idUser +
-                '}';
+                ", idUser=" + idUser +
+                '}';*/
+        return nomIndicateur;
     }
 }

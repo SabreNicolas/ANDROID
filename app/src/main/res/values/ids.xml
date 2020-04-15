@@ -7,4 +7,24 @@
     <item name="dynamicValues4" type="id"/>
     <item name="dynamicValues5" type="id"/>
 
+    <item name="data1" type="id"/>
+    <item name="data2" type="id"/>
+    <item name="data3" type="id"/>
+    <item name="data4" type="id"/>
+    <item name="data5" type="id"/>
+
+    <item name="Indicateur1" type="id"/>
+    <item name="Indicateur2" type="id"/>
+    <item name="Indicateur3" type="id"/>
+    <item name="Indicateur4" type="id"/>
+    <item name="Indicateur5" type="id"/>
+
+    <item name="valueChamp" type="id"/>
+    <item name="valueMenu" type="id"/>
+    <item name="valueYesNo" type="id"/>
+    <item name="valueCurseur" type="id"/>
+
+    <item name="valueOfIndicateur" type="id"/>
+    <item name="pourcentCurseur" type="id"/>
+
 </resources>

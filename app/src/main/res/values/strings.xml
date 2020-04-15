@@ -24,16 +24,24 @@
     <string name="edit">EDIT</string>
     <string name="values">Valeurs possibles :</string>
     <string name="nbValues">Nb de valeurs possibles :</string>
+    <string name="nbIndicateur">Nb d\'indicateurs :</string>
 
     <string-array name="type_arrays">
         <item>Champ de saisie</item>
-        <item>Case à cocher</item>
         <item>Menu déroulant</item>
         <item>Oui ou Non</item>
         <item>Curseur</item>
     </string-array>
 
     <string-array name="listNbValues">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="listNbIndicateurs">
+        <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>

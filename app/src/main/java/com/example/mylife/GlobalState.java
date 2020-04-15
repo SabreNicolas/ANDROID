@@ -163,66 +163,6 @@ public class GlobalState extends Application {
         return "";
     }
 
-    /*public String sendPost(String requete) throws Exception {
-        if (requete != null) {
-            URL obj = new URL(URL + requete);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-            //add reuqest header
-            con.setRequestMethod("POST");
-            con.setRequestProperty("requete", requete);
-            con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-
-            //Send post request
-            con.setDoOutput(true);
-
-            int responseCode = con.getResponseCode();
-            System.out.println("\nSending 'POST' request to URL : " + obj);
-            System.out.println("Response Code : " + responseCode);
-
-            InputStream in = null;
-            in = new BufferedInputStream(con.getInputStream());
-            String txtReponse = convertStreamToString(in);
-            con.disconnect();
-
-            System.out.println(txtReponse);
-            return txtReponse;
-        }
-        return "";
-    }*/
-
-
-
-    /*public String sendGet(String requete) throws Exception {
-        if (requete != null) {
-
-            String urlData = URL + requete;
-
-            URL obj = new URL(urlData);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-            //optional default is GET
-            con.setRequestMethod("GET");
-
-            //add request header
-            con.setRequestProperty("requete", requete);
-
-            int responseCode = con.getResponseCode();
-            System.out.println("\nSending 'GET' request to URL : " + urlData);
-            System.out.println("Response Code : " + responseCode);
-
-            InputStream in = null;
-            in = new BufferedInputStream(con.getInputStream());
-            String txtReponse = convertStreamToString(in);
-            con.disconnect();
-            System.out.println(txtReponse);
-            return txtReponse;
-
-        }
-        return "";
-
-    }*/
-
     public void deleteEspace(){
         this.espace = null;
     }

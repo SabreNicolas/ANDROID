@@ -182,7 +182,6 @@ public class addIndicateur extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        // méthode appellé lors du click sur editPseudo ou idbutton
         switch (v.getId()) {
             case R.id.buttonTerminerAddIndicateur:
                 String name = editTextName.getText().toString();
@@ -240,11 +239,11 @@ public class addIndicateur extends AppCompatActivity implements View.OnClickList
         String selectedItem = parent.getItemAtPosition(position).toString();
         nbVal = 0;
 
-        if(selectedItem.equals("Case à cocher") || selectedItem.equals("Menu déroulant") || selectedItem.equals("Champ de saisie") || selectedItem.equals("Oui ou Non") || selectedItem.equals("Curseur")){
+        if(selectedItem.equals("Menu déroulant") || selectedItem.equals("Champ de saisie") || selectedItem.equals("Oui ou Non") || selectedItem.equals("Curseur")){
             zoneAddNbValues.removeAllViews();
             typeSelected = selectedItem;
 
-            if(selectedItem.equals("Case à cocher") || selectedItem.equals("Menu déroulant"))
+            if(selectedItem.equals("Menu déroulant"))
             {
                 TextView libelleNbValues = new TextView(getApplicationContext());
                 libelleNbValues.setText("Nombre de valeurs possibles :");

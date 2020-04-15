@@ -14,7 +14,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".addData"></activity>
+        <activity android:name=".addDataEspace"></activity>
         <activity android:name=".HistoricEspaces" />
         <activity android:name=".ListIndicateurs" />
         <activity android:name=".addEspace" />
