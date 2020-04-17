@@ -45,6 +45,8 @@ import classBDD.Espace;
 import classBDD.Indicateur;
 import classBDD.User;
 
+import static java.lang.Thread.sleep;
+
 public class addDataEspace extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
 
     private static final String CAT = "IME";
@@ -58,9 +60,9 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
     private Date dateData;
     private String dateDataFormatted;
     private User u;
-    private ArrayList<Indicateur> listIndicateursRecup;
-    private ArrayList<Indicateur> listAllIndicateurs;
-    private Map<Indicateur,String> mapValueGetForDate;
+    private ArrayList<Indicateur> listIndicateursRecup = new ArrayList<Indicateur>();
+    private ArrayList<Indicateur> listAllIndicateurs = new ArrayList<Indicateur>();
+    private Map<Indicateur,String> mapValueGetForDate  = new HashMap<>();
     private String httpType;
     private JSONObject reqBody;
     private int nbVal;
@@ -128,14 +130,28 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                         System.out.println("les indicateurs connus sont : " + listIndicateursRecup);
 
                         if (!listIndicateursRecup.isEmpty()){
-                            getData();
+                            setNbIndicateur();
                         }
                     }
                     else if (json.has("indicateur")){
                         alerter("Ajout réussi !");
+                        finish();
                         Intent listEspaces= new Intent(getApplicationContext(),ListEspaces.class);
                         startActivity(listEspaces);
                     }
+                    else if (json.has("indicateursDate")){
+                        jsa = json.getJSONArray("indicateursDate");
+                        for (int i = 0; i < jsa.length(); i++) {
+                            JSONObject indicateur = jsa.getJSONObject(i);
+                            String s = indicateur.toString();
+                            Indicateur e  = gson.fromJson(s, Indicateur.class);
+                            mapValueGetForDate.put(e,indicateur.get("valeur").toString());
+                        }
+                        if (!mapValueGetForDate.isEmpty()){
+                            setValueIndicateur();
+                        }
+                    }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -168,11 +184,9 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                                                   int monthOfYear, int dayOfMonth) {
                                 date.setText(year + "-"
                                         + (monthOfYear + 1) + "-" + dayOfMonth);
-                                if (!listIndicateursRecup.isEmpty()){
-                                    //TODO : a la place de get data, lancer requetes de recup des values et ensuite les renseigner avec add data ou depuis l'ecouteur
-                                    getData();
-                                }
-
+                                    System.out.println("changement de la date, je check si j'ai des valeurs");
+                                    mapValueGetForDate.clear();
+                                    setNbIndicateur();
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
@@ -190,9 +204,6 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
         gs.deleteEspace();
         name.setText(espace.getNomEspace());
         setDate();
-
-        listIndicateursRecup = new ArrayList<Indicateur>();
-        listAllIndicateurs = new ArrayList<Indicateur>();
 
         addDataEspace.JSONAsyncTask jsAT = new JSONAsyncTask();
         reqBody = null;
@@ -235,6 +246,7 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.listEspace:
                 // affiche la liste des espaces de l'user
+                finish();
                 Intent listEspaces= new Intent(this,ListEspaces.class);
                 startActivity(listEspaces);
                 break;
@@ -258,7 +270,7 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
         date.setText(dateDataFormatted);
     }
 
-    private void getData(){
+    private void setNbIndicateur(){
         for (int i = 0; i < nbIndicateur.getCount(); i++) {
             if (nbIndicateur.getItemAtPosition(i).toString().equals(((String.valueOf(listIndicateursRecup.size()))))) {
                 nbIndicateur.setSelection(i);
@@ -267,13 +279,31 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
             }
         }
 
-        // TODO : pourquoi impossible de récupèrer le spinner ici et faire le changement depuis ici au lieu de l'ecouteur de selection d'item
+        addDataEspace.JSONAsyncTask jsATDate = new JSONAsyncTask();
+        jsATDate.execute("activites/" +espace.getId()+"/"+date.getText()+"/indicateurs");
 
-        //TODO : exécuter requêtes pour recupérer value pour la date
-        // dans le onPostExecute si has indicateursDate alors remplir map
-        // si map pas vide, remplir value
-        // localhost:8888/API_ANDROID/activites/3/2020-04-15/indicateurs
+
+        //TODO : si map pas vide, remplir value en fonction du type de l'indicateur
     }
+
+    private void setIndicateurs(Spinner indicateur){
+        for (int j = 0; j < listIndicateursRecup.size(); j++) {
+            for (int k = 0; k < indicateur.getCount(); k++) {
+                if (indicateur.getItemAtPosition(k).toString().equals((listIndicateursRecup.get(j).getNomIndicateur()))) {
+                    indicateur.setSelection(k);
+                    indicateur.setEnabled(false);
+                    listIndicateursRecup.remove(j);
+                    return;
+                }
+            }
+        }
+    }
+
+    private void setValueIndicateur(){
+        System.out.println("**************** j'ai des values a mettre pour cette date");
+    }
+
+
 
     @Override
     public void onClick(View v) {
@@ -343,19 +373,8 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                 ll.addView(indicateur);
                 zoneAddIndicateur.addView(ll);
 
-                //TODO : pourquoi à partir de 3, un n'est pas complété et grisé alors que check Ok est affiché ???
                 if (!listIndicateursRecup.isEmpty()){
-                    for (int j = 0; j < listIndicateursRecup.size(); j++) {
-                        for (int k = 0; k < indicateur.getCount(); k++) {
-                            if (indicateur.getItemAtPosition(k).toString().equals((listIndicateursRecup.get(j).getNomIndicateur()))) {
-                                indicateur.setSelection(k);
-                                indicateur.setEnabled(false);
-                                listIndicateursRecup.remove(j);
-                                System.out.println("check OK *********");
-                                break;
-                            }
-                        }
-                    }
+                    setIndicateurs(indicateur);
                 }
             }
         }
@@ -378,10 +397,7 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                     mapIndicateur.put(viewParent, selectedIndicateur);
 
 
-                    //TODO : quand cliques sur date + au démarrage => vérifier si data pour la date, si OUI remplir et update BDD + griser nb indicateurs et indicateurs
-                    // vérifiable dans les indicateurs que l'on recup pour l'espace
-                    // si on connait juste les indicateurs : griser nbindicateur et indicateur + laisser entrer data => insert
-                    // eviter de choisir plusieurs fois le même indicateur
+                    //TODO : eviter de choisir plusieurs fois le même indicateur
 
                     if (type.equals("Champ de saisie")) {
                         EditText champSaisie = new EditText(getApplicationContext());

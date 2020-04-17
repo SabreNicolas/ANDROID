@@ -1,5 +1,11 @@
 package classBDD;
 
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
+
+import java.util.Objects;
+
 public class Indicateur {
 
     private Integer id;
@@ -58,5 +64,19 @@ public class Indicateur {
                 ", idUser=" + idUser +
                 '}';*/
         return nomIndicateur;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Indicateur that = (Indicateur) o;
+        return nomIndicateur.equals(that.nomIndicateur);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public int hashCode() {
+        return Objects.hash(nomIndicateur);
     }
 }
