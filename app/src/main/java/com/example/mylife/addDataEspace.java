@@ -2,6 +2,7 @@ package com.example.mylife;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -59,6 +60,7 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
     private User u;
     private ArrayList<Indicateur> listIndicateursRecup;
     private ArrayList<Indicateur> listAllIndicateurs;
+    private Map<Indicateur,String> mapValueGetForDate;
     private String httpType;
     private JSONObject reqBody;
     private int nbVal;
@@ -124,6 +126,10 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                         isAllIndicateurs = true;
                         System.out.println("tout les indicateurs en BDD sont : " + listAllIndicateurs);
                         System.out.println("les indicateurs connus sont : " + listIndicateursRecup);
+
+                        if (!listIndicateursRecup.isEmpty()){
+                            getData();
+                        }
                     }
                     else if (json.has("indicateur")){
                         alerter("Ajout réussi !");
@@ -162,7 +168,10 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                                                   int monthOfYear, int dayOfMonth) {
                                 date.setText(year + "-"
                                         + (monthOfYear + 1) + "-" + dayOfMonth);
-                                System.out.println("click sur date : " +date.getText());
+                                if (!listIndicateursRecup.isEmpty()){
+                                    //TODO : a la place de get data, lancer requetes de recup des values et ensuite les renseigner avec add data ou depuis l'ecouteur
+                                    getData();
+                                }
 
                             }
                         }, mYear, mMonth, mDay);
@@ -191,9 +200,6 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
         jsAT.execute("activites/" + espace.getId()+"/indicateurs");
         addDataEspace.JSONAsyncTask jsATall = new JSONAsyncTask();
         jsATall.execute("indicateursUser/" +u.getId()+"/indicateurs");
-
-        //TODO si je connais déjà les indicateurs, griser les menu select des nombre et indicateurs
-        // laisser juste le choix de la value
     }
 
     @Override
@@ -252,6 +258,23 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
         date.setText(dateDataFormatted);
     }
 
+    private void getData(){
+        for (int i = 0; i < nbIndicateur.getCount(); i++) {
+            if (nbIndicateur.getItemAtPosition(i).toString().equals(((String.valueOf(listIndicateursRecup.size()))))) {
+                nbIndicateur.setSelection(i);
+                nbIndicateur.setEnabled(false);
+                break;
+            }
+        }
+
+        // TODO : pourquoi impossible de récupèrer le spinner ici et faire le changement depuis ici au lieu de l'ecouteur de selection d'item
+
+        //TODO : exécuter requêtes pour recupérer value pour la date
+        // dans le onPostExecute si has indicateursDate alors remplir map
+        // si map pas vide, remplir value
+        // localhost:8888/API_ANDROID/activites/3/2020-04-15/indicateurs
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -261,7 +284,6 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                     LinearLayout ll = findViewById(R.id.Indicateur+i);
                     Indicateur indicateur = mapIndicateur.get(ll);
                     if (indicateur != null){
-                        System.out.println("************************** indicateur "+indicateur);
                         if (indicateur.getType().equals("Champ de saisie")){
                             EditText valueView = ll.findViewById(R.id.valueOfIndicateur);
                             value = String.valueOf(valueView.getText());
@@ -277,7 +299,6 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                             SeekBar valueView = ll.findViewById(R.id.valueOfIndicateur);
                             value = String.valueOf(valueView.getProgress());
                         }
-                        System.out.println("$$$$$$$$ : "+value);
 
                         if(value.equals("")){
                             alerter("Il y a au moins une valeur non renseignée");
@@ -299,6 +320,7 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    @SuppressLint("ResourceType")
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String selectedItem = parent.getItemAtPosition(position).toString();
@@ -320,6 +342,21 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                 indicateur.setId(R.id.data+i);
                 ll.addView(indicateur);
                 zoneAddIndicateur.addView(ll);
+
+                //TODO : pourquoi à partir de 3, un n'est pas complété et grisé alors que check Ok est affiché ???
+                if (!listIndicateursRecup.isEmpty()){
+                    for (int j = 0; j < listIndicateursRecup.size(); j++) {
+                        for (int k = 0; k < indicateur.getCount(); k++) {
+                            if (indicateur.getItemAtPosition(k).toString().equals((listIndicateursRecup.get(j).getNomIndicateur()))) {
+                                indicateur.setSelection(k);
+                                indicateur.setEnabled(false);
+                                listIndicateursRecup.remove(j);
+                                System.out.println("check OK *********");
+                                break;
+                            }
+                        }
+                    }
+                }
             }
         }
         else {
@@ -365,6 +402,8 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                         RadioButton no = new RadioButton(getApplicationContext());
                         yes.setText("Oui");
                         no.setText("Non");
+                        yes.setId(1);
+                        no.setId(0);
                         radioGroup.addView(yes);
                         radioGroup.addView(no);
                         radioGroup.setId(R.id.valueOfIndicateur);

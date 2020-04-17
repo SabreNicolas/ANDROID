@@ -86,6 +86,12 @@ public class addIndicateur extends AppCompatActivity implements View.OnClickList
                     zoneAddValues.removeAllViews();
                     zoneAddNbValues.removeAllViews();
                     nbVal=0;
+                    for (int i = 0; i < selectType.getCount(); i++) {
+                        if (selectType.getItemAtPosition(i).toString().equals("Champ de saisie")) {
+                            selectType.setSelection(i);
+                            break;
+                        }
+                    }
                 }
                 else {
                     alerter("Indicateur mis à jour avec succès !");
