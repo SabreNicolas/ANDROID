@@ -2,6 +2,7 @@ package com.example.mylife;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.MatrixCursor;
 import android.graphics.Color;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -23,7 +25,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import classBDD.Espace;
@@ -36,6 +40,10 @@ public class ListEspaces extends AppCompatActivity {
     private User u;
     private ArrayList<Espace> listEspaces;
     private ListView lv;
+    private Date dateData;
+    private String dateDataFormatted;
+    private TextView date;
+    private DatePickerDialog datePickerDialog;
 
 
     class JSONAsyncTask extends AsyncTask<String, Void, JSONObject> {
@@ -107,13 +115,45 @@ public class ListEspaces extends AppCompatActivity {
         id = u.getId();
         TextView editTextLogin = (TextView) findViewById(R.id.login);
         editTextLogin.setText(nom.toUpperCase() + " "+ prenom);
+        date = (TextView) findViewById(R.id.dateAdd);
+        date.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final java.util.Calendar c = java.util.Calendar.getInstance();
+                int mYear = c.get(java.util.Calendar.YEAR); // current year
+                int mMonth = c.get(java.util.Calendar.MONTH); // current month
+                int mDay = c.get(java.util.Calendar.DAY_OF_MONTH); // current day
+                // date picker dialog
+                datePickerDialog = new DatePickerDialog(ListEspaces.this,
+                        new DatePickerDialog.OnDateSetListener() {
 
-
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                date.setText(String.format("%02d", year) + "-"
+                                        + String.format("%02d", (monthOfYear + 1)) + "-" + String.format("%02d", dayOfMonth));
+                                dateDataFormatted = date.getText().toString();
+                                gs.setDate(dateDataFormatted);
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+            }
+        });
         listEspaces = new ArrayList<Espace>();
 
         ListEspaces.JSONAsyncTask jsAT = new JSONAsyncTask();
         jsAT.execute("espacesUser/" + id+"/espaces");
 
+        setDate();
+
+    }
+
+    private void setDate(){
+        dateData = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        dateDataFormatted = sdf.format(dateData);
+        date.setText(dateDataFormatted);
+        gs.setDate(dateDataFormatted);
     }
 
     @Override

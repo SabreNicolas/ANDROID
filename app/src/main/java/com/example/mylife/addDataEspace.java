@@ -3,7 +3,6 @@ package com.example.mylife;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,11 +10,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewParent;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -33,11 +30,7 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -50,16 +43,13 @@ import static java.lang.Thread.sleep;
 
 public class addDataEspace extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
 
+    GlobalState gs;
     private static final String CAT = "IME";
     private TextView name;
-    private TextView date;
-    private DatePickerDialog datePickerDialog;
     private Button btnTerminer;
     private Spinner nbIndicateur;
     private LinearLayout zoneAddIndicateur;
     private Espace espace;
-    private Date dateData;
-    private String dateDataFormatted;
     private User u;
     private ArrayList<Indicateur> listIndicateursRecup = new ArrayList<Indicateur>();
     private ArrayList<Indicateur> listAllIndicateurs = new ArrayList<Indicateur>();
@@ -71,9 +61,8 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
     private Map<LinearLayout,Indicateur> mapIndicateur = new HashMap<>();
     private Map<LinearLayout,String> mapValueIndicateur = new HashMap<>();
     private boolean isUpdate = false;
-
-    private boolean isAllIndicateurs = false;
     private boolean requestOK = false;
+    private String date;
 
 
     class JSONAsyncTask extends AsyncTask<String, Void, JSONObject> {
@@ -115,22 +104,34 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
 
                 try {
                     JSONArray jsa = null;
-                    if ( json.has("indicateurs")){
-                        jsa = json.getJSONArray("indicateurs");
+                    if ( json.has("indicateurs") || json.has("indicateursEspace") || json.has("indicateursDate")){
+                        if (json.has("indicateurs")){
+                            jsa = json.getJSONArray("indicateurs");
+                        }
+                        else if (json.has("indicateursEspace")){
+                            jsa = json.getJSONArray("indicateursEspace");
+                        }
+                        else {
+                            jsa = json.getJSONArray("indicateursDate");
+                        }
                         for (int i = 0; i < jsa.length(); i++) {
                             JSONObject indicateur = jsa.getJSONObject(i);
                             String s = indicateur.toString();
                             Indicateur e  = gson.fromJson(s, Indicateur.class);
-                            if(isAllIndicateurs == true) {
+                            if (json.has("indicateurs")){
                                 listAllIndicateurs.add(e);
+                                System.out.println("tout les indicateurs en BDD sont : " + listAllIndicateurs);
                             }
-                            else{
+                            else if (json.has("indicateursEspace")){
                                 listIndicateursRecup.add(e);
+                                System.out.println("les indicateurs connus sont : " + listIndicateursRecup);
+                            }
+                            else {
+                                mapValueGetForDate.put(e,indicateur.get("valeur").toString());
+                                mapIdActivite.put(e, Integer.parseInt(indicateur.get("idActivite").toString()));
+                                System.out.println("les indicateurs et value pour la date : " + mapValueGetForDate);
                             }
                         }
-                        isAllIndicateurs = true;
-                        System.out.println("tout les indicateurs en BDD sont : " + listAllIndicateurs);
-                        System.out.println("les indicateurs connus sont : " + listIndicateursRecup);
 
                         if (!listIndicateursRecup.isEmpty()){
                             setNbIndicateur();
@@ -141,19 +142,6 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                         finish();
                         Intent listEspaces= new Intent(getApplicationContext(),ListEspaces.class);
                         startActivity(listEspaces);
-                    }
-                    else if (json.has("indicateursDate")){
-                        jsa = json.getJSONArray("indicateursDate");
-                        for (int i = 0; i < jsa.length(); i++) {
-                            JSONObject indicateur = jsa.getJSONObject(i);
-                            String s = indicateur.toString();
-                            Indicateur e  = gson.fromJson(s, Indicateur.class);
-                            mapValueGetForDate.put(e,indicateur.get("valeur").toString());
-                            mapIdActivite.put(e, Integer.parseInt(indicateur.get("idActivite").toString()));
-                        }
-                        if (!mapValueGetForDate.isEmpty()){
-                            isUpdate = true;
-                        }
                     }
                     else if (isUpdate == true){
                         alerter("Valeurs mis à jour !");
@@ -167,7 +155,6 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
             }
         }
     }
-    GlobalState gs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,33 +162,6 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_add_data_espace);
 
         name = (TextView) findViewById(R.id.EspaceName);
-        date = (TextView) findViewById(R.id.dateAdd);
-        date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar c = Calendar.getInstance();
-                int mYear = c.get(Calendar.YEAR); // current year
-                int mMonth = c.get(Calendar.MONTH); // current month
-                int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
-                // date picker dialog
-                datePickerDialog = new DatePickerDialog(addDataEspace.this,
-                        new DatePickerDialog.OnDateSetListener() {
-
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                date.setText(String.format("%02d", year) + "-"
-                                        + String.format("%02d", (monthOfYear + 1)) + "-" + String.format("%02d", dayOfMonth));
-                                    System.out.println("changement de la date, je check si j'ai des valeurs");
-                                    mapValueGetForDate.clear();
-                                    isUpdate = false;
-                                    setNbIndicateur();
-                            }
-                        }, mYear, mMonth, mDay);
-                datePickerDialog.show();
-            }
-        });
-
         btnTerminer = (Button) findViewById(R.id.buttonTerminerAddData);
         btnTerminer.setOnClickListener(this);
         nbIndicateur = findViewById(R.id.SpinnerNbIndicateur);
@@ -213,21 +173,9 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
         espace = gs.getEspace();
         gs.deleteEspace();
         name.setText(espace.getNomEspace());
-        setDate();
-
-        addDataEspace.JSONAsyncTask jsAT = new JSONAsyncTask();
-        reqBody = null;
-        httpType = "GET";
-        jsAT.execute("activites/" + espace.getId()+"/indicateurs");
-        try {
-            jsAT.get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        addDataEspace.JSONAsyncTask jsATall = new JSONAsyncTask();
-        jsATall.execute("indicateursUser/" +u.getId()+"/indicateurs");
+        date = gs.getDate();
+        System.out.println("la date est : "+date);
+        getIndicateurs();
     }
 
     @Override
@@ -280,25 +228,43 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private void setDate(){
-        dateData = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        dateDataFormatted = sdf.format(dateData);
-        date.setText(dateDataFormatted);
+    private void getIndicateurs(){
+        addDataEspace.JSONAsyncTask jsAT = new JSONAsyncTask();
+        reqBody = null;
+        httpType = "GET";
+        jsAT.execute("activites/" + espace.getId()+"/indicateurs");
+        try {
+            jsAT.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        addDataEspace.JSONAsyncTask jsATall = new JSONAsyncTask();
+        jsATall.execute("indicateursUser/" +u.getId()+"/indicateurs");
+        try {
+            jsATall.get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setNbIndicateur(){
-        //TODO si changement de date alors vider les champs
-        // et mettre les valeurs pour la nouvelle date si besoin
-
         addDataEspace.JSONAsyncTask jsATDate = new JSONAsyncTask();
-        jsATDate.execute("activites/" +espace.getId()+"/"+date.getText()+"/indicateurs");
+        jsATDate.execute("activites/" +espace.getId()+"/"+date+"/indicateurs");
         try {
             jsATDate.get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+
+        if (!mapValueGetForDate.isEmpty()){
+            isUpdate = true;
         }
 
         for (int i = 0; i < nbIndicateur.getCount(); i++) {
@@ -361,7 +327,7 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                             System.out.println("POST");
                             this.httpType = "POST";
                             this.reqBody = null;
-                            jsAT.execute("/activites/?idEspace="+espace.getId()+"&idIndicateur="+indicateur.getId()+"&valeur="+value+"&date="+date.getText());
+                            jsAT.execute("/activites/?idEspace="+espace.getId()+"&idIndicateur="+indicateur.getId()+"&valeur="+value+"&date="+date);
                         }
                         else{
                             requestOK = false;
@@ -373,7 +339,7 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                                 reqBody.put("idEspace", espace.getId());
                                 reqBody.put("idIndicateur", indicateur.getId());
                                 reqBody.put("valeur", value);
-                                reqBody.put("date", date.getText());
+                                reqBody.put("date", date);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -441,14 +407,15 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                     mapIndicateur.put(viewParent, selectedIndicateur);
 
 
-                    //TODO : eviter de choisir plusieurs fois le même indicateur
-
                     if (type.equals("Champ de saisie")) {
                         EditText champSaisie = new EditText(getApplicationContext());
                         champSaisie.setId(R.id.valueOfIndicateur);
                         viewParent.addView(champSaisie, layoutParam);
                         if (!mapValueGetForDate.isEmpty()){
                             champSaisie.setText(mapValueGetForDate.get(selectedIndicateur));
+                        }
+                        else {
+                            champSaisie.setText("");
                         }
                     } else if (type.equals("Menu déroulant")) {
                         Spinner menuDeroulant = new Spinner(getApplicationContext());
@@ -465,6 +432,9 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                                     break;
                                 }
                             }
+                        }
+                        else {
+                            menuDeroulant.setSelection(0);
                         }
 
                     } else if (type.equals("Oui ou Non")) {
@@ -487,6 +457,10 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                             else {
                                 yes.setChecked(true);
                             }
+                        }
+                        else {
+                            yes.setChecked(false);
+                            no.setChecked(false);
                         }
 
                     } else if (type.equals("Curseur")) {
@@ -516,6 +490,9 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                         viewParent.addView(curseur, layoutParam);
                         if (!mapValueGetForDate.isEmpty()){
                             curseur.setProgress(Integer.parseInt(mapValueGetForDate.get(selectedIndicateur)));
+                        }
+                        else {
+                            curseur.setProgress(0);
                         }
                     }
                 }

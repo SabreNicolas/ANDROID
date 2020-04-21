@@ -24,6 +24,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -35,12 +36,13 @@ public class GlobalState extends Application {
 
     private static final String CAT = "IME4";
     public SharedPreferences settings;
-    private final String URL = "http://10.0.2.2:8888/API_ANDROID/";
+    //private String URL = "http://10.0.2.2:8888/API_ANDROID/";
     //pc worldline
-    //private final String URL = "http://10.0.2.2/API_ANDROID/";
+    private String URL = "http://10.0.2.2/API_ANDROID/";
     private User user = null;
     private Espace espace = null ;
     private Indicateur indicateur = null;
+    private String date;
 
     @Override
     public void onCreate() {
@@ -196,4 +198,12 @@ public class GlobalState extends Application {
     public void setIndicateur(Indicateur indicateur) {
         this.indicateur = indicateur;
     }
+
+    public String getDate() { return date; }
+
+    public void setDate(String date) { this.date = date; }
+
+    public String getURL() { return URL; }
+
+    public void setURL(String URL) { this.URL = URL; }
 }
