@@ -25,6 +25,11 @@
     <string name="values">Valeurs possibles :</string>
     <string name="nbValues">Nb de valeurs possibles :</string>
     <string name="nbIndicateur">Nb d\'indicateurs :</string>
+    <string name="url">URL de l\'API :</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_account">Account</string>
+    <string name="changeMDP">Changer le mot de passe</string>
+    <string name="deleteAccount">Supprimer le compte</string>
 
     <string-array name="type_arrays">
         <item>Champ de saisie</item>
@@ -47,5 +52,6 @@
         <item>4</item>
         <item>5</item>
     </string-array>
+
 
 </resources>

@@ -13,9 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +20,7 @@ import org.json.JSONObject;
 import classBDD.Espace;
 import classBDD.User;
 
-public class addEspace extends AppCompatActivity implements View.OnClickListener{
+public class AddEspace extends AppCompatActivity implements View.OnClickListener{
 
     private static final String CAT = "IME";
     private EditText editTextName;
@@ -47,7 +44,7 @@ public class addEspace extends AppCompatActivity implements View.OnClickListener
             // On exécute la requete
             String res = null;
             try {
-                res = addEspace.this.gs.requete(qs[0],httpType,reqBody);
+                res = AddEspace.this.gs.requete(qs[0],httpType,reqBody);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -120,7 +117,7 @@ public class addEspace extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.addIndicateur :
                 // affiche de l'activité add Indicateur
-                Intent versaddIndicateur = new Intent(this, addIndicateur.class);
+                Intent versaddIndicateur = new Intent(this, AddIndicateur.class);
                 startActivity(versaddIndicateur);
                 break;
             case R.id.listIndicateur :
@@ -130,7 +127,7 @@ public class addEspace extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.addEspace :
                 // affiche de l'activité add Espace
-                Intent versaddEspace = new Intent(this, addEspace.class);
+                Intent versaddEspace = new Intent(this, AddEspace.class);
                 startActivity(versaddEspace);
                 break;
             case R.id.listEspace:
@@ -138,8 +135,14 @@ public class addEspace extends AppCompatActivity implements View.OnClickListener
                 Intent listEspaces= new Intent(this,ListEspaces.class);
                 startActivity(listEspaces);
                 break;
-            case R.id.action_settings : break;
-            case R.id.action_account : break;
+            case R.id.action_settings :
+                Intent setting = new Intent(this,SettingsActivity.class);
+                startActivity(setting);
+                break;
+            case R.id.action_account :
+                Intent account = new Intent(this,Account.class);
+                startActivity(account);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

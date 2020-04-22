@@ -3,16 +3,12 @@ package com.example.mylife;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.database.MatrixCursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -22,7 +18,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import classBDD.Indicateur;
 import classBDD.User;
@@ -129,7 +124,7 @@ public class ListIndicateurs extends AppCompatActivity {
                 break;
             case R.id.addIndicateur :
                 // affiche de l'activité add Indicateur
-                Intent versaddIndicateur = new Intent(this, addIndicateur.class);
+                Intent versaddIndicateur = new Intent(this, AddIndicateur.class);
                 startActivity(versaddIndicateur);
                 break;
             case R.id.listIndicateur :
@@ -139,7 +134,7 @@ public class ListIndicateurs extends AppCompatActivity {
                 break;
             case R.id.addEspace :
                 // affiche de l'activité add Espace
-                Intent versaddEspace = new Intent(this, addEspace.class);
+                Intent versaddEspace = new Intent(this, AddEspace.class);
                 startActivity(versaddEspace);
                 break;
             case R.id.listEspace:
@@ -147,8 +142,14 @@ public class ListIndicateurs extends AppCompatActivity {
                 Intent listEspaces= new Intent(this,ListEspaces.class);
                 startActivity(listEspaces);
                 break;
-            case R.id.action_settings : break;
-            case R.id.action_account : break;
+            case R.id.action_settings :
+                Intent setting = new Intent(this,SettingsActivity.class);
+                startActivity(setting);
+                break;
+            case R.id.action_account :
+                Intent account = new Intent(this,Account.class);
+                startActivity(account);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

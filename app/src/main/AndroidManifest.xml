@@ -14,14 +14,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".addDataEspace"></activity>
+        <activity
+            android:name=".Account"
+            android:label="@string/title_activity_account"/>
+        <activity
+        android:name=".SettingsActivity"
+            android:label="@string/title_activity_settings"/>
+        <activity android:name=".AddDataEspace" />
         <activity android:name=".HistoricEspaces" />
         <activity android:name=".ListIndicateurs" />
-        <activity android:name=".addEspace" />
-        <activity android:name=".addIndicateur" />
+        <activity android:name=".AddEspace" />
+        <activity android:name=".AddIndicateur" />
         <activity android:name=".ListEspaces" />
         <activity android:name=".Calendar" />
-        <activity android:name=".inscription" />
+        <activity android:name=".Inscription" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

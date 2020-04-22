@@ -161,13 +161,13 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
                 if(type.equals("Espace")){
                     System.out.println("je vais editer espace avec id : "+id);
                     gs.setEspace((Espace) getItem(position));
-                    Intent versEspace= new Intent(context,addEspace.class);
+                    Intent versEspace= new Intent(context, AddEspace.class);
                     context.startActivity(versEspace);
                 }
                 else{
                     System.out.println("je vais editer indicateur avec id : "+id);
                     gs.setIndicateur((Indicateur) getItem(position));
-                    Intent versIndicateur= new Intent(context,addIndicateur.class);
+                    Intent versIndicateur= new Intent(context, AddIndicateur.class);
                     context.startActivity(versIndicateur);
                 }
                 notifyDataSetChanged();
@@ -182,7 +182,7 @@ public class MyCustomAdapter extends BaseAdapter implements ListAdapter {
                 int id = (int) getItemId(position);
                 System.out.println("je vais remplir des data pour espace avec id : "+id);
                 gs.setEspace((Espace) getItem(position));
-                Intent versAddData= new Intent(context,addDataEspace.class);
+                Intent versAddData= new Intent(context, AddDataEspace.class);
                 context.startActivity(versAddData);
                 notifyDataSetChanged();
             }

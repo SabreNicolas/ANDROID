@@ -41,7 +41,7 @@ import classBDD.User;
 
 import static java.lang.Thread.sleep;
 
-public class addDataEspace extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
+public class AddDataEspace extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener{
 
     GlobalState gs;
     private static final String CAT = "IME";
@@ -79,7 +79,7 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
             // On exécute la requete
             String res = null;
             try {
-                res = addDataEspace.this.gs.requete(qs[0],httpType,reqBody);
+                res = AddDataEspace.this.gs.requete(qs[0],httpType,reqBody);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -196,7 +196,7 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.addIndicateur :
                 // affiche de l'activité add Indicateur
-                Intent versaddIndicateur = new Intent(this, addIndicateur.class);
+                Intent versaddIndicateur = new Intent(this, AddIndicateur.class);
                 startActivity(versaddIndicateur);
                 break;
             case R.id.listIndicateur :
@@ -206,7 +206,7 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.addEspace :
                 // affiche de l'activité add Espace
-                Intent versaddEspace = new Intent(this, addEspace.class);
+                Intent versaddEspace = new Intent(this, AddEspace.class);
                 startActivity(versaddEspace);
                 break;
             case R.id.listEspace:
@@ -215,8 +215,14 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
                 Intent listEspaces= new Intent(this,ListEspaces.class);
                 startActivity(listEspaces);
                 break;
-            case R.id.action_settings : break;
-            case R.id.action_account : break;
+            case R.id.action_settings :
+                Intent setting = new Intent(this,SettingsActivity.class);
+                startActivity(setting);
+                break;
+            case R.id.action_account :
+                Intent account = new Intent(this,Account.class);
+                startActivity(account);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -229,7 +235,7 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
     }
 
     private void getIndicateurs(){
-        addDataEspace.JSONAsyncTask jsAT = new JSONAsyncTask();
+        AddDataEspace.JSONAsyncTask jsAT = new JSONAsyncTask();
         reqBody = null;
         httpType = "GET";
         jsAT.execute("activites/" + espace.getId()+"/indicateurs");
@@ -241,7 +247,7 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
             e.printStackTrace();
         }
 
-        addDataEspace.JSONAsyncTask jsATall = new JSONAsyncTask();
+        AddDataEspace.JSONAsyncTask jsATall = new JSONAsyncTask();
         jsATall.execute("indicateursUser/" +u.getId()+"/indicateurs");
         try {
             jsATall.get();
@@ -253,7 +259,7 @@ public class addDataEspace extends AppCompatActivity implements View.OnClickList
     }
 
     private void setNbIndicateur(){
-        addDataEspace.JSONAsyncTask jsATDate = new JSONAsyncTask();
+        AddDataEspace.JSONAsyncTask jsATDate = new JSONAsyncTask();
         jsATDate.execute("activites/" +espace.getId()+"/"+date+"/indicateurs");
         try {
             jsATDate.get();

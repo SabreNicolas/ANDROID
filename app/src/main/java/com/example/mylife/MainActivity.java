@@ -3,11 +3,8 @@ package com.example.mylife;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -114,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
+        //TODO : pré remplir login et MDP grâce à settings (voir fait avec bourdeau)
         //String login = settings.getString("login","");
         //String passe = settings.getString("passe","");
         //edtLogin.setText(login);
@@ -122,6 +120,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // verif état du réseau pour activer les btns
         btnConnexion.setEnabled(gs.verifReseau());
         btnInscription.setEnabled(gs.verifReseau());
+
+        if(!gs.verifReseau()){
+            alerter("Vous devez avoir une connexion internet");
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // affichage des boutons du menu
+        getMenuInflater().inflate(R.menu.menu_main_activity, menu);
+        return true;
+    }
+
+    //TODO : gérer changement url, si changement url alors recharger gs
+    // quand dans préférences tout est affiché dans menu => voir si possible de changer
+    // ou alors pas possible de chnager url si pas co ???
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch(id) {
+            case R.id.action_settings :
+                Intent setting = new Intent(this,SettingsActivity.class);
+                startActivity(setting);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -130,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Log.i(CAT, s);
         Toast myToast = Toast.makeText(this, s, Toast.LENGTH_SHORT);
         myToast.show();
-
     }
 
 
@@ -158,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //if(isCo == false) alerter("identifiants incorrectes");
                 break;
             case R.id.buttonInscription:
-                Intent versSubscribe= new Intent(this,inscription.class);
+                Intent versSubscribe= new Intent(this, Inscription.class);
                 startActivity(versSubscribe);
                 break;
             default:    alerter("cas non prévu");
