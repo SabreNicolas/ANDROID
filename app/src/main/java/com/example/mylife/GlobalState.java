@@ -38,8 +38,8 @@ public class GlobalState extends Application {
     public SharedPreferences settings;
     //private String URL = "http://10.0.2.2:8888/API_ANDROID/";
     //pc worldline
-    //private String URL = "http://10.0.2.2/API_ANDROID/";
-    private String URL = null;
+    private String URL = "http://10.0.2.2/API_ANDROID/";
+    //private String URL = null;
     private User user = null;
     private Espace espace = null ;
     private Indicateur indicateur = null;
@@ -49,6 +49,10 @@ public class GlobalState extends Application {
     public void onCreate() {
         super.onCreate();
         settings = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.clear();
+        editor.putString("urlData",URL);
+        editor.commit();
     }
 
     public static String jsonToPrettyFormat(String jsonString) {
@@ -132,7 +136,7 @@ public class GlobalState extends Application {
 
     public String requete(String requete, String type, JSONObject reqBody) throws Exception {
         if (requete != null) {
-            URL = settings.getString("urlData","http://10.0.2.2:8888/API_ANDROID/");
+            URL = settings.getString("urlData","");
             URL obj = new URL(URL + requete);
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 

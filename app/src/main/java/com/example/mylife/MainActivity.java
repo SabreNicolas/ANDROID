@@ -53,15 +53,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             //String res = MainActivity.this.gs.requete(qs[0]);
             String res = null;
             try {
+                System.out.println("envoie de la requête");
                 res = MainActivity.this.gs.requete(qs[0],"GET",null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
             try {
                 JSONArray jsonTab = new JSONArray(res);
-                //System.out.println("je récupère : " + jsonTab);
                 JSONObject json = jsonTab.getJSONObject(0);
-
                 return json;
             } catch (JSONException e) {
                 e.printStackTrace();
