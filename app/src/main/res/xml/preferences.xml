@@ -7,6 +7,7 @@
         android:summary="Indique si la sauvegarde des identifiants est active par défaut"
         android:title="Sauver Préférences" />
     <EditTextPreference
+        android:defaultValue="http://10.0.2.2:8888/API_ANDROID/"
         android:key="urlData"
         android:summary="Adresse de l'API fournissant les données, 10.0.2.2 pour désigner le serveur sur lequel tourne l'émulateur !
         Possibilité de changer cela dans le fichier preferences.xml"
