@@ -1,6 +1,9 @@
 package com.example.mylife;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -14,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,13 +38,12 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
     private EditText editTextLogin;
     private EditText editTextPasswd;
     private EditText editTextPasswdConfirm;
-    private Button btnSubscibe;
+    private Button btnUpdate;
+    private Button btnDelete;
     private User u;
+    private String httpType;
+    private JSONObject reqBody;
 
-    //TODO : alert pour confirmation si delete account + check si delete aussi espaces et indicateurs
-    // changer mot de passe + verif si nouveau OK pour connexion + user de gs change mdp
-    // voir si possible de stocker login et MDP dans settings pour compléter automatiquement pour connexion
-    // via gs.getUser pour cela ??? (voir ce qui a était fait en TD avec bourdo)
 
     class JSONAsyncTask extends AsyncTask<String, Void, JSONObject> {
         // Params, Progress, Result
@@ -56,7 +59,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
             // On exécute la requete
             String res = null;
             try {
-                res = Account.this.gs.requete(qs[0],"POST",null);
+                res = Account.this.gs.requete(qs[0],httpType,reqBody);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -72,34 +75,24 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
 
         protected void onPostExecute(JSONObject json) { // S’exécute dans l’UI Thread
             if (json != null) {
-                //super.onPostExecute(json);
-
-                JSONArray jsa = null;
-                try {
-                    jsa = json.getJSONArray("user");
-                    JSONObject user = jsa.getJSONObject(0);
-                    String s = user.toString();
-
-                    Gson gson = new GsonBuilder()
-                            .serializeNulls()
-                            .disableHtmlEscaping()
-                            .setPrettyPrinting()
-                            .create();
-
-                    u = gson.fromJson(s, User.class);
-
+                if(httpType.equals("PUT")){
+                    alerter("Mot de passe mis à jour avec succès !");
+                    u.setPasswd(editTextPasswd.getText().toString());
                     gs.setUser(u);
-
-                    Intent versAcceuil= new Intent(gs,ListEspaces.class);
-                    startActivity(versAcceuil);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    editTextPasswd.setText("");
+                    editTextPasswdConfirm.setText("");
                 }
+                else {
+                    Intent connexion = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(connexion);
+                }
+
             }
         }
     }
     GlobalState gs;
+    SharedPreferences settings;
+    DialogInterface.OnClickListener dialogClickListener;
 
 
     @Override
@@ -115,21 +108,38 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
         TextView userInfos = (TextView) findViewById(R.id.infosUser);
         userInfos.setText(nom.toUpperCase() + " "+ prenom);
 
-        if (android.os.Build.VERSION.SDK_INT > 9)
-        {
-            StrictMode.ThreadPolicy policy = new
-                    StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-        }
         editTextLogin = (EditText) findViewById(R.id.editTextLogin);
-        editTextLogin.setOnClickListener(this);
+        editTextLogin.setText(u.getLogin());
+        editTextLogin.setEnabled(false);
         editTextPasswd = (EditText) findViewById(R.id.editTextPasswd);
-        editTextPasswd.setOnClickListener(this);
         editTextPasswdConfirm = (EditText) findViewById(R.id.editTextPasswd2);
-        editTextPasswdConfirm.setOnClickListener(this);
-        //btnSubscibe = (Button) findViewById(R.id.buttonSubscribe);
-        //btnSubscibe.setOnClickListener(this);
-        gs = (GlobalState) getApplication();
+        btnUpdate = (Button) findViewById(R.id.buttonChangeMDP);
+        btnUpdate.setOnClickListener(this);
+        btnDelete = (Button) findViewById(R.id.buttonDeleteAccount);
+        btnDelete.setOnClickListener(this);
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+        dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        JSONAsyncTask jsaDelete = new JSONAsyncTask();
+                        httpType = "DELETE";
+                        reqBody = null;
+
+                        SharedPreferences.Editor editorDelete = settings.edit();
+                        editorDelete.clear();
+
+                        jsaDelete.execute("/users/"+id);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        alerter("Le compte n'a pas été supprimé");
+                        break;
+                }
+            }
+        };
     }
 
     @Override
@@ -176,6 +186,11 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
                 Intent account = new Intent(this,Account.class);
                 startActivity(account);
                 break;
+            case R.id.deconnexion :
+                gs.setUser(null);
+                Intent connexion = new Intent(this,MainActivity.class);
+                startActivity(connexion);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -189,17 +204,11 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        // méthode appellé lors du click sur editPseudo ou idbutton
         switch (v.getId()) {
-            case R.id.buttonSubscribe:
-                String login = editTextLogin.getText().toString();
+            case R.id.buttonChangeMDP:
                 String passwd = editTextPasswd.getText().toString();
                 String passwdConfirm = editTextPasswdConfirm.getText().toString();
 
-                if(login.isEmpty()){
-                    alerter("Saisir votre login");
-                    return;
-                }
                 if(passwd.isEmpty()){
                     alerter("Saisir votre mot de passe");
                     return;
@@ -214,7 +223,28 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
                 }
 
                 JSONAsyncTask jsAT = new JSONAsyncTask();
-                jsAT.execute("/users?nom=" +nom+"&prenom="+prenom+"&login="+login+"&passwd="+passwd);
+                httpType = "PUT";
+                reqBody = new JSONObject();
+                try {
+                    reqBody.put("passwd", passwd);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                // sauvegarde du nouveau mot de passe
+                SharedPreferences.Editor editor = settings.edit();
+                editor.clear();
+                editor.putString("login",editTextLogin.getText().toString());
+                editor.putString("passe",passwd);
+                editor.commit();
+
+                jsAT.execute("/users/"+id);
+                break;
+
+            case R.id.buttonDeleteAccount:
+                AlertDialog.Builder ab = new AlertDialog.Builder(this);
+                ab.setMessage("Voulez-vous supprimer votre compte et vos données ?").setPositiveButton("OUI", dialogClickListener)
+                        .setNegativeButton("NON", dialogClickListener).show();
                 break;
             default:    alerter("cas non prévu");
         }

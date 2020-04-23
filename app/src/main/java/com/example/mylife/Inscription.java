@@ -1,8 +1,10 @@
 package com.example.mylife;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -89,6 +91,7 @@ public class Inscription extends AppCompatActivity implements View.OnClickListen
         }
     }
     GlobalState gs;
+    SharedPreferences settings;
 
 
     @Override
@@ -113,6 +116,7 @@ public class Inscription extends AppCompatActivity implements View.OnClickListen
         editTextPasswdConfirm.setOnClickListener(this);
         btnSubscibe = (Button) findViewById(R.id.buttonSubscribe);
         btnSubscibe.setOnClickListener(this);
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
         gs = (GlobalState) getApplication();
     }
 
@@ -158,6 +162,14 @@ public class Inscription extends AppCompatActivity implements View.OnClickListen
                     alerter("Les mots de passe sont différents");
                     return;
                 }
+
+                // sauvegarde du contenu des champs login, passwd et URL API
+                // dans les préférences
+                SharedPreferences.Editor editor = settings.edit();
+                editor.clear();
+                editor.putString("login",login);
+                editor.putString("passe",passwd);
+                editor.commit();
 
                 JSONAsyncTask jsAT = new JSONAsyncTask();
                 jsAT.execute("/users?nom=" +nom+"&prenom="+prenom+"&login="+login+"&passwd="+passwd);

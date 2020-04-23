@@ -35,4 +35,9 @@
         android:id="@+id/action_account"
         app:showAsAction="never"
         android:title="Compte"/>
+
+    <item
+        android:id="@+id/deconnexion"
+        app:showAsAction="never"
+        android:title="Déconnexion"/>
 </menu>

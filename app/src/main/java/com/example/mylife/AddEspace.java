@@ -143,6 +143,11 @@ public class AddEspace extends AppCompatActivity implements View.OnClickListener
                 Intent account = new Intent(this,Account.class);
                 startActivity(account);
                 break;
+            case R.id.deconnexion :
+                gs.setUser(null);
+                Intent connexion = new Intent(this,MainActivity.class);
+                startActivity(connexion);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

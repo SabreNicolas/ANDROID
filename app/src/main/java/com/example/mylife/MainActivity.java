@@ -1,8 +1,10 @@
 package com.example.mylife;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -87,9 +89,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(versAcceuil);
 
             }
+            else alerter("identifiants incorrectes");
         }
     }
     GlobalState gs;
+    SharedPreferences settings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnConnexion.setOnClickListener(this);
         btnInscription = (Button) findViewById(R.id.buttonInscription);
         btnInscription.setOnClickListener(this);
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
         gs = (GlobalState) getApplication();
     }
 
@@ -111,11 +116,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-        //TODO : pré remplir login et MDP grâce à settings (voir fait avec bourdeau)
-        //String login = settings.getString("login","");
-        //String passe = settings.getString("passe","");
-        //edtLogin.setText(login);
-        //edtPasse.setText(passe);
+        String login = settings.getString("login","");
+        String passwd = settings.getString("passe","");
+        editTextLogin.setText(login);
+        editTextPasswd.setText(passwd);
 
         // verif état du réseau pour activer les btns
         btnConnexion.setEnabled(gs.verifReseau());
@@ -133,9 +137,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    //TODO : gérer changement url, si changement url alors recharger gs
-    // quand dans préférences tout est affiché dans menu => voir si possible de changer
-    // ou alors pas possible de chnager url si pas co ???
+    //TODO : voir pour récupèrer la nouvelle value de l'url passé dans les préférences
+    // quand on veut se connecter et que l'on change la value de l'url
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -176,9 +179,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     alerter("Saisir votre mot de passe");
                     return;
                 }
+
+                // sauvegarde du contenu des champs login, passwd et URL API
+                // dans les préférences
+                SharedPreferences.Editor editor = settings.edit();
+                editor.clear();
+                editor.putString("login",login);
+                editor.putString("passe",passwd);
+                editor.commit();
+
                 JSONAsyncTask jsAT = new JSONAsyncTask();
                 jsAT.execute("/users/" + login+"/"+passwd);
-                //if(isCo == false) alerter("identifiants incorrectes");
                 break;
             case R.id.buttonInscription:
                 Intent versSubscribe= new Intent(this, Inscription.class);
