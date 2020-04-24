@@ -169,6 +169,7 @@ public class Inscription extends AppCompatActivity implements View.OnClickListen
                 editor.clear();
                 editor.putString("login",login);
                 editor.putString("passe",passwd);
+                editor.putString("urlData",gs.getURL());
                 editor.commit();
 
                 JSONAsyncTask jsAT = new JSONAsyncTask();

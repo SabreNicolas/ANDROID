@@ -234,8 +234,9 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
                 // sauvegarde du nouveau mot de passe
                 SharedPreferences.Editor editor = settings.edit();
                 editor.clear();
-                editor.putString("login",editTextLogin.getText().toString());
+                editor.putString("login",u.getLogin());
                 editor.putString("passe",passwd);
+                editor.putString("urlData",gs.getURL());
                 editor.commit();
 
                 jsAT.execute("/users/"+id);

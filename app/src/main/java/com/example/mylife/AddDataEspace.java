@@ -174,7 +174,6 @@ public class AddDataEspace extends AppCompatActivity implements View.OnClickList
         gs.deleteEspace();
         name.setText(espace.getNomEspace());
         date = gs.getDate();
-        System.out.println("la date est : "+date);
         getIndicateurs();
     }
 

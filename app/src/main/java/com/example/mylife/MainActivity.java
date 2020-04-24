@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editor.clear();
                 editor.putString("login",login);
                 editor.putString("passe",passwd);
+                editor.putString("urlData",gs.getURL());
                 editor.commit();
 
                 JSONAsyncTask jsAT = new JSONAsyncTask();
