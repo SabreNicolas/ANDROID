@@ -155,8 +155,8 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
         switch(id) {
             case R.id.action_historique :
                 // affiche de l'activité historique
-                Intent versPrefs = new Intent(this, Calendar.class);
-                startActivity(versPrefs);
+                Intent versHistoric = new Intent(this, HistoricEspaces.class);
+                startActivity(versHistoric);
                 break;
             case R.id.addIndicateur :
                 // affiche de l'activité add Indicateur
@@ -183,6 +183,7 @@ public class Account extends AppCompatActivity implements View.OnClickListener{
                 startActivity(setting);
                 break;
             case R.id.action_account :
+                finish();
                 Intent account = new Intent(this,Account.class);
                 startActivity(account);
                 break;

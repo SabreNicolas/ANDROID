@@ -26,7 +26,6 @@
         <activity android:name=".AddEspace" />
         <activity android:name=".AddIndicateur" />
         <activity android:name=".ListEspaces" />
-        <activity android:name=".Calendar" />
         <activity android:name=".Inscription" />
         <activity android:name=".MainActivity">
             <intent-filter>

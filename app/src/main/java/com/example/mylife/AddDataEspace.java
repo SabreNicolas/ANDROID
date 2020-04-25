@@ -130,6 +130,9 @@ public class AddDataEspace extends AppCompatActivity implements View.OnClickList
                                 mapValueGetForDate.put(e,indicateur.get("valeur").toString());
                                 mapIdActivite.put(e, Integer.parseInt(indicateur.get("idActivite").toString()));
                                 System.out.println("les indicateurs et value pour la date : " + mapValueGetForDate);
+                                if (!mapValueGetForDate.isEmpty()){
+                                    isUpdate = true;
+                                }
                             }
                         }
 
@@ -190,8 +193,8 @@ public class AddDataEspace extends AppCompatActivity implements View.OnClickList
         switch(id) {
             case R.id.action_historique :
                 // affiche de l'activité historique
-                Intent versPrefs = new Intent(this, Calendar.class);
-                startActivity(versPrefs);
+                Intent versHistoric = new Intent(this, HistoricEspaces.class);
+                startActivity(versHistoric);
                 break;
             case R.id.addIndicateur :
                 // affiche de l'activité add Indicateur
@@ -271,10 +274,6 @@ public class AddDataEspace extends AppCompatActivity implements View.OnClickList
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-
-        if (!mapValueGetForDate.isEmpty()){
-            isUpdate = true;
         }
 
         for (int i = 0; i < nbIndicateur.getCount(); i++) {

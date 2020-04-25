@@ -112,8 +112,8 @@ public class AddEspace extends AppCompatActivity implements View.OnClickListener
         switch(id) {
             case R.id.action_historique :
                 // affiche de l'activité historique
-                Intent versPrefs = new Intent(this, Calendar.class);
-                startActivity(versPrefs);
+                Intent versHistoric = new Intent(this, HistoricEspaces.class);
+                startActivity(versHistoric);
                 break;
             case R.id.addIndicateur :
                 // affiche de l'activité add Indicateur
@@ -127,6 +127,7 @@ public class AddEspace extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.addEspace :
                 // affiche de l'activité add Espace
+                finish();
                 Intent versaddEspace = new Intent(this, AddEspace.class);
                 startActivity(versaddEspace);
                 break;

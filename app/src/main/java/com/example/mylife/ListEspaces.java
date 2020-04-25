@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -27,7 +28,7 @@ import java.util.Date;
 import classBDD.Espace;
 import classBDD.User;
 
-public class ListEspaces extends AppCompatActivity {
+public class ListEspaces extends AppCompatActivity{
     private String nom;
     private String prenom;
     private Integer id;
@@ -38,6 +39,7 @@ public class ListEspaces extends AppCompatActivity {
     private String dateDataFormatted;
     private TextView date;
     private DatePickerDialog datePickerDialog;
+
 
 
     class JSONAsyncTask extends AsyncTask<String, Void, JSONObject> {
@@ -163,8 +165,8 @@ public class ListEspaces extends AppCompatActivity {
         switch(id) {
             case R.id.action_historique :
                 // affiche de l'activité historique
-                Intent versPrefs = new Intent(this, Calendar.class);
-                startActivity(versPrefs);
+                Intent versHistoric = new Intent(this, HistoricEspaces.class);
+                startActivity(versHistoric);
                 break;
             case R.id.addIndicateur :
                 // affiche de l'activité add Indicateur
@@ -183,6 +185,7 @@ public class ListEspaces extends AppCompatActivity {
                 break;
             case R.id.listEspace:
                 // affiche la liste des indicateurs de l'user
+                finish();
                 Intent listEspaces= new Intent(this,ListEspaces.class);
                 startActivity(listEspaces);
                 break;

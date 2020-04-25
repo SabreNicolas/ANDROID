@@ -6,16 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".HistoricEspaces">
 
+
     <TextView
         android:id="@+id/dateHistoric"
-        android:layout_width="263dp"
-        android:layout_height="49dp"
-        android:text="TextView"
-        android:textSize="25dp"
+        android:layout_width="402dp"
+        android:layout_height="51dp"
         android:gravity="center"
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.444"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07" />
+        app:layout_constraintVertical_bias="0.042" />
+
+    <ListView
+        android:id="@+id/lvHistoric"
+        android:layout_width="384dp"
+        android:layout_height="498dp"
+        android:textSize="17dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.481"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dateHistoric"
+        app:layout_constraintVertical_bias="0.718"></ListView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
