@@ -120,7 +120,7 @@ public class ListEspaces extends AppCompatActivity{
                 int mMonth = c.get(java.util.Calendar.MONTH); // current month
                 int mDay = c.get(java.util.Calendar.DAY_OF_MONTH); // current day
                 // date picker dialog
-                datePickerDialog = new DatePickerDialog(ListEspaces.this,
+                datePickerDialog = new DatePickerDialog(ListEspaces.this,R.style.datepicker,
                         new DatePickerDialog.OnDateSetListener() {
 
                             @Override
